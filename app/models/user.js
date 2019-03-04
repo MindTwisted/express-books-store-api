@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         discount: {
             type: DataTypes.DECIMAL(8, 2),
-            defaultValue: 0.00,
+            defaultValue: '0.00',
             allowNull: false
         }
     }, {
