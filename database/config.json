@@ -1,16 +1,16 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "database_development",
-    "host": "127.0.0.1",
+    "username": "express",
+    "password": "secret",
+    "database": "books_store",
+    "host": "192.168.99.100",
     "dialect": "mysql"
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
+    "username": "express",
+    "password": "secret",
+    "database": "test_books_store",
+    "host": "192.168.99.100",
     "dialect": "mysql"
   },
   "production": {
