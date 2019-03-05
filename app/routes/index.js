@@ -4,6 +4,7 @@ const authController = require('@controllers/authController');
 const errorHandleMiddleware = require('@middlewares/errorHandleMiddleware');
 
 router.post('/auth/register', authController.register);
+router.post('/auth/login', authController.login);
 
 router.use(errorHandleMiddleware);
 

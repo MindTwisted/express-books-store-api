@@ -13,6 +13,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "inquirer": "^6.2.2",
+    "jsonwebtoken": "^8.5.0",
     "module-alias": "^2.2.0",
     "morgan": "~1.9.0",
     "mysql2": "^1.6.5",
@@ -27,6 +28,7 @@
     "@models": "app/models",
     "@views": "app/views",
     "@middlewares": "app/middlewares",
-    "@serializers": "app/serializers"
+    "@serializers": "app/serializers",
+    "@services": "app/services"
   }
 }
