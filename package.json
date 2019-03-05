@@ -8,12 +8,15 @@
   },
   "dependencies": {
     "bcrypt": "^3.0.4",
+    "commander": "^2.19.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
+    "inquirer": "^6.2.2",
     "module-alias": "^2.2.0",
     "morgan": "~1.9.0",
     "mysql2": "^1.6.5",
+    "node-rsa": "^1.0.5",
     "nodemon": "^1.18.10",
     "sequelize": "^4.43.0",
     "sequelize-cli": "^5.4.0"
