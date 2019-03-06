@@ -7,6 +7,15 @@ const User = db.User;
 const jwtService = require('@services/jwtService');
 
 module.exports = {
+    current(req, res, next) {
+        const user = req.user;
+        const data = {
+            user
+        };
+
+        res.status(200).send(view.generate(null, data));
+    },
+    
     register(req, res, next) {
         const body = req.body;
 
@@ -45,9 +54,7 @@ module.exports = {
                         }
 
                         const token = jwtService.sign({
-                            id: user.id,
-                            email: user.email,
-                            role: user.role
+                            user
                         });
 
                         const text = `User ${user.name} was successfully logged in.`;
