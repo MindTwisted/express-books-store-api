@@ -23,11 +23,13 @@ module.exports = {
             },
             role: {
                 allowNull: false,
-                type: Sequelize.ENUM('admin', 'user')
+                type: Sequelize.ENUM('admin', 'user'),
+                defaultValue: 'user'
             },
             discount: {
                 allowNull: false,
-                type: Sequelize.DECIMAL(8, 2)
+                type: Sequelize.DECIMAL(8, 2),
+                defaultValue: '0.00'
             },
             createdAt: {
                 allowNull: false,
