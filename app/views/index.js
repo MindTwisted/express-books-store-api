@@ -1,4 +1,6 @@
-const View = {
+'use strict';
+
+module.exports = {
     generate(text = null, data = null, success = true) {
         const response = {
             status: success ? 'success' : 'failed',
@@ -16,5 +18,3 @@ const View = {
         return response;
     }
 };
-
-module.exports = View;

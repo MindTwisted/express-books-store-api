@@ -1,3 +1,5 @@
+'use strict';
+
 const view = require('@views/index');
 
 module.exports = (req, res, next) => {

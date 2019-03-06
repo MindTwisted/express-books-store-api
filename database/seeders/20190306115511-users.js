@@ -9,6 +9,7 @@ module.exports = {
                 name: 'John Walker',
                 email: 'john@example.com',
                 password: bcrypt.hashSync('secret', 10),
+                role: 'admin',
                 createdAt: new Date(),
                 updatedAt: new Date()
             },
@@ -16,6 +17,7 @@ module.exports = {
                 name: 'William Smith',
                 email: 'smith@example.com',
                 password: bcrypt.hashSync('secret', 10),
+                role: 'user',
                 createdAt: new Date(),
                 updatedAt: new Date()
             }

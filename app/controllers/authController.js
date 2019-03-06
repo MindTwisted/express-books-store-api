@@ -7,6 +7,14 @@ const User = db.User;
 const jwtService = require('@services/jwtService');
 
 module.exports = {
+
+    /**
+     * Get currently authenticated user info
+     * 
+     * @param {Object} req 
+     * @param {Object} res 
+     * @param {Function} next  
+     */
     current(req, res, next) {
         const user = req.user;
         const data = {
@@ -16,6 +24,13 @@ module.exports = {
         res.status(200).send(view.generate(null, data));
     },
     
+    /**
+     * Register new user
+     * 
+     * @param {Object} req 
+     * @param {Object} res 
+     * @param {Function} next  
+     */
     register(req, res, next) {
         const body = req.body;
 
@@ -34,6 +49,13 @@ module.exports = {
             }).catch(next);
     },
 
+    /**
+     * Login user
+     * 
+     * @param {Object} req 
+     * @param {Object} res 
+     * @param {Function} next 
+     */
     login(req, res, next) {
         const body = req.body;
         const email = body.email;
@@ -67,4 +89,5 @@ module.exports = {
                     })
             }).catch(next);
     }
+    
 };
