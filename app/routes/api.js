@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const authController = require('@controllers/authController');
 const authorController = require('@controllers/authorController');
+const genreController = require('@controllers/genreController');
 const errorHandleMiddleware = require('@middlewares/errorHandleMiddleware');
 const authenticationMiddleware = require('@middlewares/authenticationMiddleware');
 const isLoggedInMiddleware = require('@middlewares/isLoggedInMiddleware');
@@ -20,6 +21,12 @@ router.get('/authors/:id', authorController.show);
 router.post('/authors', [isLoggedInMiddleware, isAdminMiddleware], authorController.store);
 router.put('/authors/:id', [isLoggedInMiddleware, isAdminMiddleware], authorController.update);
 router.delete('/authors/:id', [isLoggedInMiddleware, isAdminMiddleware], authorController.destroy);
+
+router.get('/genres', genreController.index);
+router.get('/genres/:id', genreController.show);
+router.post('/genres', [isLoggedInMiddleware, isAdminMiddleware], genreController.store);
+router.put('/genres/:id', [isLoggedInMiddleware, isAdminMiddleware], genreController.update);
+router.delete('/genres/:id', [isLoggedInMiddleware, isAdminMiddleware], genreController.destroy);
 
 router.use(errorHandleMiddleware);
 
