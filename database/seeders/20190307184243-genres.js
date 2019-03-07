@@ -4,9 +4,17 @@ const faker = require('faker');
 
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        const genres = Array.from(Array(100)).map(() => {
+        const uniqueNames = {};
+
+        while (Object.keys(uniqueNames).length !== 100) {
+            const name = faker.lorem.words(3);
+
+            uniqueNames[name] = true;
+        }
+
+        const genres = Object.keys(uniqueNames).map(name => {
             return {
-                name: faker.lorem.words(3),
+                name,
                 createdAt: new Date(),
                 updatedAt: new Date()
             };
