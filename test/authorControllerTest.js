@@ -502,4 +502,85 @@ describe('authorsController', () => {
     
     });
 
+    /**
+     * Author destroy tests
+     */
+    describe(`DELETE ${AUTHORS_URL}/:id`, () => {
+
+        it('should response with 401 if auth token was not provided', done => {
+            agent.delete(`${AUTHORS_URL}/1`)
+                .end((err, res) => {
+                    res.should.have.status(401);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('status').eql('failed');
+                    
+                    done();
+                });
+        });
+
+        it('should response with 403 if auth token was not owned by admin', done => {
+            agent.put(AUTH_URL)
+                .send({
+                    email: "smith@example.com",
+                    password: "secret"
+                })
+                .then(res => {
+                    const token = res.body.body.data.token;
+
+                    agent.delete(`${AUTHORS_URL}/1`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .end((err, res) => {
+                            res.should.have.status(403);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('status').eql('failed');
+                            
+                            done();
+                        });
+                });
+        });
+
+        it('should response with 404 if author with provided id does not exist', done => {
+            agent.put(AUTH_URL)
+                .send({
+                    email: "john@example.com",
+                    password: "secret"
+                })
+                .then(res => {
+                    const token = res.body.body.data.token;
+
+                    agent.delete(`${AUTHORS_URL}/999`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .end((err, res) => {
+                            res.should.have.status(404);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('status').eql('failed');
+                            
+                            done();
+                        });
+                });
+        });
+
+        it('should response with 200 if valid author id was provided', done => {
+            agent.put(AUTH_URL)
+                .send({
+                    email: "john@example.com",
+                    password: "secret"
+                })
+                .then(res => {
+                    const token = res.body.body.data.token;
+
+                    agent.delete(`${AUTHORS_URL}/1`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.have.property('status').eql('success');
+                            
+                            done();
+                        });
+                });
+        });
+
+    });
+
 });

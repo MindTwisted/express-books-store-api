@@ -19,6 +19,7 @@ router.get('/authors', authorController.index);
 router.get('/authors/:id', authorController.show);
 router.post('/authors', [isLoggedInMiddleware, isAdminMiddleware], authorController.store);
 router.put('/authors/:id', [isLoggedInMiddleware, isAdminMiddleware], authorController.update);
+router.delete('/authors/:id', [isLoggedInMiddleware, isAdminMiddleware], authorController.destroy);
 
 router.use(errorHandleMiddleware);
 

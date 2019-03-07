@@ -45,7 +45,7 @@ module.exports = {
             })
             .then(author => {
                 if (!author) {
-                    return next(new NotFoundError(`Author with id ${id} doesn't exist.`));
+                    return Promise.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
                 }
 
                 const data = {
@@ -96,7 +96,7 @@ module.exports = {
             })
             .then(author => {
                 if (!author) {
-                    return next(new NotFoundError(`Author with id ${id} doesn't exist.`));
+                    return Promise.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
                 }
 
                 author.name = name;
@@ -110,6 +110,33 @@ module.exports = {
                 };
 
                 res.status(200).send(view.generate(text, data));
+            }).catch(next);
+    },
+
+    /**
+     * Delete author
+     * 
+     * @param {Object} req 
+     * @param {Object} res 
+     * @param {Function} next 
+     */
+    destroy(req, res, next) {
+        const id = req.params.id;
+
+        Author.findOne({
+                where: {id}
+            })
+            .then(author => {
+                if (!author) {
+                    return Promise.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
+                }
+
+                return author.destroy();
+            })
+            .then(() => {
+                const text = `Author with id ${id} was successfully deleted.`;
+
+                res.status(200).send(view.generate(text));
             }).catch(next);
     }
 
