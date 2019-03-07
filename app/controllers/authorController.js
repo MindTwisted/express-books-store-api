@@ -77,6 +77,40 @@ module.exports = {
 
                 res.status(200).send(view.generate(text, data));
             }).catch(next);
+    },
+
+    /**
+     * Update author
+     * 
+     * @param {Object} req 
+     * @param {Object} res 
+     * @param {Function} next 
+     */
+    update(req, res, next) {
+        const id = req.params.id;
+        const body = req.body;
+        const name = body.name;
+
+        Author.findOne({
+                where: {id}
+            })
+            .then(author => {
+                if (!author) {
+                    return next(new NotFoundError(`Author with id ${id} doesn't exist.`));
+                }
+
+                author.name = name;
+
+                return author.save();
+            })
+            .then(author => {
+                const text = 'Author was successfully updated.';
+                const data = {
+                    author
+                };
+
+                res.status(200).send(view.generate(text, data));
+            }).catch(next);
     }
 
 };
