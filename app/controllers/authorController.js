@@ -1,6 +1,7 @@
 'use strict';
 
 const view = require('@views/index');
+const NotFoundError = require('@errors/NotFoundError');
 const db = require('@models/index');
 const Author = db.Author;
 
@@ -23,6 +24,32 @@ module.exports = {
             .then(authors => {
                 const data = {
                     authors
+                };
+
+                res.status(200).send(view.generate(null, data));
+            }).catch(next);
+    },
+
+    /**
+     * Get author by id
+     * 
+     * @param {Object} req 
+     * @param {Object} res 
+     * @param {Function} next 
+     */
+    show(req, res, next) {
+        const id = req.params.id;
+
+        Author.findOne({
+                where: {id}
+            })
+            .then(author => {
+                if (!author) {
+                    return next(new NotFoundError(`Author with id ${id} doesn't exist.`));
+                }
+
+                const data = {
+                    author
                 };
 
                 res.status(200).send(view.generate(null, data));

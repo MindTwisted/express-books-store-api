@@ -113,6 +113,49 @@ describe('authorsController', () => {
     });
 
     /**
+     * Authors show tests
+     */
+    describe(`GET ${AUTHORS_URL}/:id`, () => {
+
+        it('should response with 200 and author if author with provided id exists', done => {
+            agent.get(`${AUTHORS_URL}/1`)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('status').eql('success');
+                    res.body.body.data.should.have.property('author');
+                    res.body.body.data.author.should.have.property('id');
+                    res.body.body.data.author.should.have.property('name');
+                    
+                    done();
+                });
+        });
+
+        it('should response with 404 if author with provided id does not exist', done => {
+            agent.get(`${AUTHORS_URL}/999`)
+                .end((err, res) => {
+                    res.should.have.status(404);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('status').eql('failed');
+                    
+                    done();
+                });
+        });
+
+        it('should response with 404 if author with provided id does not exist', done => {
+            agent.get(`${AUTHORS_URL}/abc`)
+                .end((err, res) => {
+                    res.should.have.status(404);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('status').eql('failed');
+                    
+                    done();
+                });
+        });
+
+    });
+
+    /**
      * Authors store tests
      */
     describe(`POST ${AUTHORS_URL}`, () => {
