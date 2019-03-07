@@ -36,7 +36,84 @@ describe('authorsController', () => {
     });
 
     /**
-     * Create author tests
+     * Authors index tests
+     */
+    describe(`GET ${AUTHORS_URL}`, () => {
+    
+        it('should response with 200 and authors limited by 50', done => {
+            agent.get(AUTHORS_URL)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('status').eql('success');
+                    res.body.body.data.should.have.property('authors');
+                    res.body.body.data.authors.should.have.lengthOf(50);
+                    res.body.body.data.authors[0].should.have.property('id').eql(1);
+                    
+                    done();
+                });
+        });
+
+        it('should response with 200 and authors shifted by offset if offset is a valid integer', done => {
+            agent.get(`${AUTHORS_URL}?offset=100`)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('status').eql('success');
+                    res.body.body.data.should.have.property('authors');
+                    res.body.body.data.authors.should.have.lengthOf(50);
+                    res.body.body.data.authors[0].should.have.property('id').eql(101);
+                    
+                    done();
+                });
+        });
+
+        it('should response with 200 and authors shifted by offset if offset is not a valid integer', done => {
+            agent.get(`${AUTHORS_URL}?offset=100,2`)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('status').eql('success');
+                    res.body.body.data.should.have.property('authors');
+                    res.body.body.data.authors.should.have.lengthOf(50);
+                    res.body.body.data.authors[0].should.have.property('id').eql(101);
+                    
+                    done();
+                });
+        });
+
+        it('should response with 200 and authors shifted by offset if offset is not a valid integer', done => {
+            agent.get(`${AUTHORS_URL}?offset=100.2`)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('status').eql('success');
+                    res.body.body.data.should.have.property('authors');
+                    res.body.body.data.authors.should.have.lengthOf(50);
+                    res.body.body.data.authors[0].should.have.property('id').eql(101);
+                    
+                    done();
+                });
+        });
+
+        it('should response with 200 and authors not shifted by offset if offset is not a valid number', done => {
+            agent.get(`${AUTHORS_URL}?offset=abc`)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('status').eql('success');
+                    res.body.body.data.should.have.property('authors');
+                    res.body.body.data.authors.should.have.lengthOf(50);
+                    res.body.body.data.authors[0].should.have.property('id').eql(1);
+                    
+                    done();
+                });
+        });
+
+    });
+
+    /**
+     * Authors store tests
      */
     describe(`POST ${AUTHORS_URL}`, () => {
 

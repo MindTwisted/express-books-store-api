@@ -15,6 +15,7 @@ router.get('/auth', [isLoggedInMiddleware], authController.current);
 router.post('/auth', authController.register);
 router.put('/auth', authController.login);
 
+router.get('/authors', authorController.index);
 router.post('/authors', [isLoggedInMiddleware, isAdminMiddleware], authorController.store);
 
 router.use(errorHandleMiddleware);

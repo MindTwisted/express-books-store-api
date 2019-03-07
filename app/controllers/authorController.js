@@ -7,6 +7,29 @@ const Author = db.Author;
 module.exports = {
 
     /**
+     * Get all authors
+     * 
+     * @param {Object} req 
+     * @param {Object} res 
+     * @param {Function} next 
+     */
+    index(req, res, next) {
+        const offset = parseInt(req.query.offset) || 0;
+
+        Author.findAll({
+                limit: 50,
+                offset
+            })
+            .then(authors => {
+                const data = {
+                    authors
+                };
+
+                res.status(200).send(view.generate(null, data));
+            }).catch(next);
+    },
+
+    /**
      * Create new author
      * 
      * @param {Object} req 
