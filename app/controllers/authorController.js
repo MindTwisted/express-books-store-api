@@ -1,9 +1,7 @@
 'use strict';
 
 const view = require('@views/index');
-const NotFoundError = require('@errors/NotFoundError');
-const db = require('@models/index');
-const Author = db.Author;
+const authorRepository = require('@repositories/authorRepository');
 
 module.exports = {
 
@@ -15,12 +13,7 @@ module.exports = {
      * @param {Function} next 
      */
     index(req, res, next) {
-        const offset = parseInt(req.query.offset) || 0;
-
-        Author.findAll({
-                limit: 50,
-                offset
-            })
+        authorRepository.findAll(req)
             .then(authors => {
                 const data = {
                     authors
@@ -38,16 +31,8 @@ module.exports = {
      * @param {Function} next 
      */
     show(req, res, next) {
-        const id = req.params.id;
-
-        Author.findOne({
-                where: {id}
-            })
+        authorRepository.findOne(req)
             .then(author => {
-                if (!author) {
-                    return Promise.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
-                }
-
                 const data = {
                     author
                 };
@@ -64,11 +49,7 @@ module.exports = {
      * @param {Function} next
      */
     store(req, res, next) {
-        const body = req.body;
-
-        Author.create({
-                name: body.name
-            })
+        authorRepository.create(req)
             .then(author => {
                 const text = 'Author was successfully created.';
                 const data = {
@@ -87,22 +68,7 @@ module.exports = {
      * @param {Function} next 
      */
     update(req, res, next) {
-        const id = req.params.id;
-        const body = req.body;
-        const name = body.name;
-
-        Author.findOne({
-                where: {id}
-            })
-            .then(author => {
-                if (!author) {
-                    return Promise.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
-                }
-
-                author.name = name;
-
-                return author.save();
-            })
+        authorRepository.update(req)
             .then(author => {
                 const text = 'Author was successfully updated.';
                 const data = {
@@ -121,20 +87,9 @@ module.exports = {
      * @param {Function} next 
      */
     destroy(req, res, next) {
-        const id = req.params.id;
-
-        Author.findOne({
-                where: {id}
-            })
+        authorRepository.delete(req)
             .then(author => {
-                if (!author) {
-                    return Promise.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
-                }
-
-                return author.destroy();
-            })
-            .then(() => {
-                const text = `Author with id ${id} was successfully deleted.`;
+                const text = `Author with id ${author.id} was successfully deleted.`;
 
                 res.status(200).send(view.generate(text));
             }).catch(next);

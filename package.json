@@ -35,6 +35,7 @@
     "@middlewares": "app/middlewares",
     "@serializers": "app/serializers",
     "@services": "app/services",
-    "@errors": "app/errors"
+    "@errors": "app/errors",
+    "@repositories": "app/repositories"
   }
 }

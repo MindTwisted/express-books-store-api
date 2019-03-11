@@ -1,9 +1,7 @@
 'use strict';
 
 const view = require('@views/index');
-const NotFoundError = require('@errors/NotFoundError');
-const db = require('@models/index');
-const Genre = db.Genre;
+const genreRepository = require('@repositories/genreRepository');
 
 module.exports = {
 
@@ -15,12 +13,7 @@ module.exports = {
      * @param {Function} next 
      */
     index(req, res, next) {
-        const offset = parseInt(req.query.offset) || 0;
-
-        Genre.findAll({
-                limit: 50,
-                offset
-            })
+        genreRepository.findAll(req)
             .then(genres => {
                 const data = {
                     genres
@@ -38,16 +31,8 @@ module.exports = {
      * @param {Function} next 
      */
     show(req, res, next) {
-        const id = req.params.id;
-
-        Genre.findOne({
-                where: {id}
-            })
+        genreRepository.findOne(req)
             .then(genre => {
-                if (!genre) {
-                    return Promise.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
-                }
-
                 const data = {
                     genre
                 };
@@ -64,11 +49,7 @@ module.exports = {
      * @param {Function} next
      */
     store(req, res, next) {
-        const body = req.body;
-
-        Genre.create({
-                name: body.name
-            })
+        genreRepository.create(req)
             .then(genre => {
                 const text = 'Genre was successfully created.';
                 const data = {
@@ -87,22 +68,7 @@ module.exports = {
      * @param {Function} next 
      */
     update(req, res, next) {
-        const id = req.params.id;
-        const body = req.body;
-        const name = body.name;
-
-        Genre.findOne({
-                where: {id}
-            })
-            .then(genre => {
-                if (!genre) {
-                    return Promise.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
-                }
-
-                genre.name = name;
-
-                return genre.save();
-            })
+        genreRepository.update(req)
             .then(genre => {
                 const text = 'Genre was successfully updated.';
                 const data = {
@@ -121,20 +87,9 @@ module.exports = {
      * @param {Function} next 
      */
     destroy(req, res, next) {
-        const id = req.params.id;
-
-        Genre.findOne({
-                where: {id}
-            })
+        genreRepository.delete(req)
             .then(genre => {
-                if (!genre) {
-                    return Promise.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
-                }
-
-                return genre.destroy();
-            })
-            .then(() => {
-                const text = `Genre with id ${id} was successfully deleted.`;
+                const text = `Genre with id ${genre.id} was successfully deleted.`;
 
                 res.status(200).send(view.generate(text));
             }).catch(next);
