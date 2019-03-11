@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     }, {});
 
     Author.associate = function (models) {
-        // associations can be defined here
+        models.Author.belongsToMany(models.Book, {through: 'BookAuthor'});
     };
 
     Author.prototype.toJSON = function () {

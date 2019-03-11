@@ -7,7 +7,7 @@ module.exports = {
         const uniqueNames = {};
 
         while (Object.keys(uniqueNames).length !== 400) {
-            const name = faker.lorem.words(3);
+            const name = faker.name.firstName() + ' ' + faker.name.lastName();
 
             uniqueNames[name] = true;
         }

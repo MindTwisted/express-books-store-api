@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     }, {});
 
     Genre.associate = function (models) {
-        // associations can be defined here
+        models.Genre.belongsToMany(models.Book, {through: 'BookGenre'});
     };
 
     Genre.prototype.toJSON = function () {
