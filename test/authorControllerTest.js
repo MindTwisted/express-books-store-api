@@ -4,6 +4,7 @@ process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const chaiEach = require('chai-each');
 const server = require('../app');
 const should = chai.should();
 const spawn = require('child-process-promise').spawn;
@@ -13,6 +14,7 @@ const AUTH_URL = '/api/auth';
 const AUTHORS_URL = '/api/authors';
 
 chai.use(chaiHttp);
+chai.use(chaiEach);
 
 const agent = chai.request.agent(server);
 
@@ -44,10 +46,10 @@ describe('authorsController', () => {
             agent.get(AUTHORS_URL)
                 .end((err, res) => {
                     res.should.have.status(200);
-                    res.body.should.be.a('object');
                     res.body.should.have.property('status').eql('success');
-                    res.body.body.data.should.have.property('authors');
-                    res.body.body.data.authors.should.have.lengthOf(50);
+                    res.body.body.data.authors.should.be.a('array').that.have.lengthOf(50);
+                    res.body.body.data.authors.should.each.have.property('id');
+                    res.body.body.data.authors.should.each.have.property('name');
                     res.body.body.data.authors[0].should.have.property('id').eql(1);
                     
                     done();
@@ -58,10 +60,10 @@ describe('authorsController', () => {
             agent.get(`${AUTHORS_URL}?offset=100`)
                 .end((err, res) => {
                     res.should.have.status(200);
-                    res.body.should.be.a('object');
                     res.body.should.have.property('status').eql('success');
-                    res.body.body.data.should.have.property('authors');
-                    res.body.body.data.authors.should.have.lengthOf(50);
+                    res.body.body.data.authors.should.be.a('array').that.have.lengthOf(50);
+                    res.body.body.data.authors.should.each.have.property('id');
+                    res.body.body.data.authors.should.each.have.property('name');
                     res.body.body.data.authors[0].should.have.property('id').eql(101);
                     
                     done();
@@ -72,10 +74,10 @@ describe('authorsController', () => {
             agent.get(`${AUTHORS_URL}?offset=100,2`)
                 .end((err, res) => {
                     res.should.have.status(200);
-                    res.body.should.be.a('object');
                     res.body.should.have.property('status').eql('success');
-                    res.body.body.data.should.have.property('authors');
-                    res.body.body.data.authors.should.have.lengthOf(50);
+                    res.body.body.data.authors.should.be.a('array').that.have.lengthOf(50);
+                    res.body.body.data.authors.should.each.have.property('id');
+                    res.body.body.data.authors.should.each.have.property('name');
                     res.body.body.data.authors[0].should.have.property('id').eql(101);
                     
                     done();
@@ -86,10 +88,10 @@ describe('authorsController', () => {
             agent.get(`${AUTHORS_URL}?offset=100.2`)
                 .end((err, res) => {
                     res.should.have.status(200);
-                    res.body.should.be.a('object');
                     res.body.should.have.property('status').eql('success');
-                    res.body.body.data.should.have.property('authors');
-                    res.body.body.data.authors.should.have.lengthOf(50);
+                    res.body.body.data.authors.should.be.a('array').that.have.lengthOf(50);
+                    res.body.body.data.authors.should.each.have.property('id');
+                    res.body.body.data.authors.should.each.have.property('name');
                     res.body.body.data.authors[0].should.have.property('id').eql(101);
                     
                     done();
@@ -100,10 +102,10 @@ describe('authorsController', () => {
             agent.get(`${AUTHORS_URL}?offset=abc`)
                 .end((err, res) => {
                     res.should.have.status(200);
-                    res.body.should.be.a('object');
                     res.body.should.have.property('status').eql('success');
-                    res.body.body.data.should.have.property('authors');
-                    res.body.body.data.authors.should.have.lengthOf(50);
+                    res.body.body.data.authors.should.be.a('array').that.have.lengthOf(50);
+                    res.body.body.data.authors.should.each.have.property('id');
+                    res.body.body.data.authors.should.each.have.property('name');
                     res.body.body.data.authors[0].should.have.property('id').eql(1);
                     
                     done();
@@ -121,7 +123,6 @@ describe('authorsController', () => {
             agent.get(`${AUTHORS_URL}/1`)
                 .end((err, res) => {
                     res.should.have.status(200);
-                    res.body.should.be.a('object');
                     res.body.should.have.property('status').eql('success');
                     res.body.body.data.should.have.property('author');
                     res.body.body.data.author.should.have.property('id');
@@ -135,7 +136,6 @@ describe('authorsController', () => {
             agent.get(`${AUTHORS_URL}/999`)
                 .end((err, res) => {
                     res.should.have.status(404);
-                    res.body.should.be.a('object');
                     res.body.should.have.property('status').eql('failed');
                     
                     done();
@@ -146,7 +146,6 @@ describe('authorsController', () => {
             agent.get(`${AUTHORS_URL}/abc`)
                 .end((err, res) => {
                     res.should.have.status(404);
-                    res.body.should.be.a('object');
                     res.body.should.have.property('status').eql('failed');
                     
                     done();
@@ -164,7 +163,6 @@ describe('authorsController', () => {
             agent.post(AUTHORS_URL)
                 .end((err, res) => {
                     res.should.have.status(401);
-                    res.body.should.be.a('object');
                     res.body.should.have.property('status').eql('failed');
                     
                     done();
@@ -184,7 +182,6 @@ describe('authorsController', () => {
                         .set('Authorization', `Bearer ${token}`)
                         .end((err, res) => {
                             res.should.have.status(403);
-                            res.body.should.be.a('object');
                             res.body.should.have.property('status').eql('failed');
                             
                             done();
@@ -205,7 +202,6 @@ describe('authorsController', () => {
                         .set('Authorization', `Bearer ${token}`)
                         .end((err, res) => {
                             res.should.have.status(422);
-                            res.body.should.be.a('object');
                             res.body.should.have.property('status').eql('failed');
                             res.body.body.data.errors.should.have.property('name');
                             
@@ -230,7 +226,6 @@ describe('authorsController', () => {
                         .set('Authorization', `Bearer ${token}`)
                         .end((err, res) => {
                             res.should.have.status(422);
-                            res.body.should.be.a('object');
                             res.body.should.have.property('status').eql('failed');
                             res.body.body.data.errors.should.have.property('name');
                             
@@ -262,7 +257,6 @@ describe('authorsController', () => {
                                 .set('Authorization', `Bearer ${token}`)
                                 .end((err, res) => {
                                     res.should.have.status(422);
-                                    res.body.should.be.a('object');
                                     res.body.should.have.property('status').eql('failed');
                                     res.body.body.data.errors.should.have.property('name');
                                     
@@ -290,7 +284,6 @@ describe('authorsController', () => {
                         .end((err, res) => {
                             
                             res.should.have.status(200);
-                            res.body.should.be.a('object');
                             res.body.should.have.property('status').eql('success');
                             res.body.body.data.author.should.have.property('id');
                             res.body.body.data.author.should.have.property('name');
@@ -311,7 +304,6 @@ describe('authorsController', () => {
             agent.put(`${AUTHORS_URL}/1`)
                 .end((err, res) => {
                     res.should.have.status(401);
-                    res.body.should.be.a('object');
                     res.body.should.have.property('status').eql('failed');
                     
                     done();
@@ -331,7 +323,6 @@ describe('authorsController', () => {
                         .set('Authorization', `Bearer ${token}`)
                         .end((err, res) => {
                             res.should.have.status(403);
-                            res.body.should.be.a('object');
                             res.body.should.have.property('status').eql('failed');
                             
                             done();
@@ -352,7 +343,6 @@ describe('authorsController', () => {
                         .set('Authorization', `Bearer ${token}`)
                         .end((err, res) => {
                             res.should.have.status(422);
-                            res.body.should.be.a('object');
                             res.body.should.have.property('status').eql('failed');
                             res.body.body.data.errors.should.have.property('name');
                             
@@ -377,7 +367,6 @@ describe('authorsController', () => {
                         .set('Authorization', `Bearer ${token}`)
                         .end((err, res) => {
                             res.should.have.status(422);
-                            res.body.should.be.a('object');
                             res.body.should.have.property('status').eql('failed');
                             res.body.body.data.errors.should.have.property('name');
                             
@@ -406,7 +395,6 @@ describe('authorsController', () => {
                                 .set('Authorization', `Bearer ${token}`)
                                 .end((err, res) => {
                                     res.should.have.status(422);
-                                    res.body.should.be.a('object');
                                     res.body.should.have.property('status').eql('failed');
                                     res.body.body.data.errors.should.have.property('name');
                                     
@@ -437,7 +425,6 @@ describe('authorsController', () => {
                                 .set('Authorization', `Bearer ${token}`)
                                 .end((err, res) => {
                                     res.should.have.status(200);
-                                    res.body.should.be.a('object');
                                     res.body.should.have.property('status').eql('success');
                                     res.body.body.data.author.should.have.property('id');
                                     res.body.body.data.author.should.have.property('name');
@@ -465,7 +452,6 @@ describe('authorsController', () => {
                         .set('Authorization', `Bearer ${token}`)
                         .end((err, res) => {
                             res.should.have.status(404);
-                            res.body.should.be.a('object');
                             res.body.should.have.property('status').eql('failed');
                             
                             done();
@@ -490,7 +476,6 @@ describe('authorsController', () => {
                         .end((err, res) => {
                             
                             res.should.have.status(200);
-                            res.body.should.be.a('object');
                             res.body.should.have.property('status').eql('success');
                             res.body.body.data.author.should.have.property('id');
                             res.body.body.data.author.should.have.property('name');
@@ -511,7 +496,6 @@ describe('authorsController', () => {
             agent.delete(`${AUTHORS_URL}/1`)
                 .end((err, res) => {
                     res.should.have.status(401);
-                    res.body.should.be.a('object');
                     res.body.should.have.property('status').eql('failed');
                     
                     done();
@@ -531,7 +515,6 @@ describe('authorsController', () => {
                         .set('Authorization', `Bearer ${token}`)
                         .end((err, res) => {
                             res.should.have.status(403);
-                            res.body.should.be.a('object');
                             res.body.should.have.property('status').eql('failed');
                             
                             done();
@@ -552,7 +535,6 @@ describe('authorsController', () => {
                         .set('Authorization', `Bearer ${token}`)
                         .end((err, res) => {
                             res.should.have.status(404);
-                            res.body.should.be.a('object');
                             res.body.should.have.property('status').eql('failed');
                             
                             done();
@@ -573,7 +555,6 @@ describe('authorsController', () => {
                         .set('Authorization', `Bearer ${token}`)
                         .end((err, res) => {
                             res.should.have.status(200);
-                            res.body.should.be.a('object');
                             res.body.should.have.property('status').eql('success');
                             
                             done();
