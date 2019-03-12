@@ -1,13 +1,13 @@
 'use strict';
 
+require('./init');
+
 process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../app');
 const should = chai.should();
-const spawn = require('child-process-promise').spawn;
-const spawnOptions = { stdio: 'inherit' };
 
 const AUTH_URL = '/api/auth';
 
@@ -16,24 +16,7 @@ chai.use(chaiHttp);
 const agent = chai.request.agent(server);
 
 describe('authController', () => {
-    /**
-     * Prepare before tests
-     */
-    before(done => {
-        spawn('./node_modules/.bin/sequelize', ['db:create'], spawnOptions)
-            .then(() => spawn('./node_modules/.bin/sequelize', ['db:migrate'], spawnOptions))
-            .then(() => spawn('./node_modules/.bin/sequelize', ['db:seed:all'], spawnOptions))
-            .then(() => done());
-    });
-
-    /**
-     * Tear down after tests
-     */
-    after(done => {
-        spawn('./node_modules/.bin/sequelize', ['db:drop'], spawnOptions)
-            .then(() => done());
-    });
-
+    
     /**
      * Current auth tests
      */

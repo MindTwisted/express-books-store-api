@@ -1,5 +1,7 @@
 'use strict';
 
+require('./init');
+
 process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
@@ -7,8 +9,6 @@ const chaiHttp = require('chai-http');
 const chaiEach = require('chai-each');
 const server = require('../app');
 const should = chai.should();
-const spawn = require('child-process-promise').spawn;
-const spawnOptions = { stdio: 'inherit' };
 
 const AUTH_URL = '/api/auth';
 const AUTHORS_URL = '/api/authors';
@@ -19,24 +19,7 @@ chai.use(chaiEach);
 const agent = chai.request.agent(server);
 
 describe('authorsController', () => {
-    /**
-     * Prepare before tests
-     */
-    before(done => {
-        spawn('./node_modules/.bin/sequelize', ['db:create'], spawnOptions)
-            .then(() => spawn('./node_modules/.bin/sequelize', ['db:migrate'], spawnOptions))
-            .then(() => spawn('./node_modules/.bin/sequelize', ['db:seed:all'], spawnOptions))
-            .then(() => done());
-    });
-
-    /**
-     * Tear down after tests
-     */
-    after(done => {
-        spawn('./node_modules/.bin/sequelize', ['db:drop'], spawnOptions)
-            .then(() => done());
-    });
-
+    
     /**
      * Authors index tests
      */
