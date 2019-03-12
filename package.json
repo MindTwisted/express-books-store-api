@@ -9,6 +9,7 @@
   "dependencies": {
     "bcrypt": "^3.0.4",
     "chai": "^4.2.0",
+    "chai-each": "0.0.1",
     "chai-http": "^4.2.1",
     "child-process-promise": "^2.2.1",
     "commander": "^2.19.0",
