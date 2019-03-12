@@ -36,5 +36,5 @@ services:
       - /app/node_modules
     command: >
       bash -c "./wait-for-it.sh mysql:3306 &&
-      node_modules/.bin/sequelize db:migrate &&
+      npm run sequelize db:migrate &&
       npm start"

@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "./node_modules/.bin/nodemon -L ./bin/www",
-    "test": "./node_modules/.bin/mocha --timeout 10000 --exit"
+    "test": "./node_modules/.bin/mocha --timeout 10000 --exit",
+    "generate-keys": "node ./bin/generate-keys.js",
+    "sequelize": "./node_modules/.bin/sequelize"
   },
   "dependencies": {
     "bcrypt": "^3.0.4",
@@ -12,7 +14,6 @@
     "chai-each": "0.0.1",
     "chai-http": "^4.2.1",
     "child-process-promise": "^2.2.1",
-    "commander": "^2.19.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",

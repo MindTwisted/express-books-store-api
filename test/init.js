@@ -7,9 +7,9 @@ const spawnOptions = { stdio: 'inherit' };
  * Prepare before tests
  */
 before(done => {
-    spawn('node_modules/.bin/sequelize', ['db:create'], spawnOptions)
-        .then(() => spawn('node_modules/.bin/sequelize', ['db:migrate'], spawnOptions))
-        .then(() => spawn('node_modules/.bin/sequelize', ['db:seed:all'], spawnOptions))
+    spawn('npm', ['run', 'sequelize', 'db:create'], spawnOptions)
+        .then(() => spawn('npm', ['run', 'sequelize', 'db:migrate'], spawnOptions))
+        .then(() => spawn('npm', ['run', 'sequelize', 'db:seed:all'], spawnOptions))
         .then(() => done());
 });
 
@@ -17,6 +17,6 @@ before(done => {
  * Tear down after tests
  */
 after(done => {
-    spawn('node_modules/.bin/sequelize', ['db:drop'], spawnOptions)
+    spawn('npm', ['run', 'sequelize', 'db:drop'], spawnOptions)
         .then(() => done());
 });
