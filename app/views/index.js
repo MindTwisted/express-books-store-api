@@ -1,17 +1,17 @@
 'use strict';
 
 module.exports = {
-    generate(text = null, data = null, success = true) {
+    generate(text, data, success = true) {
         const response = {
             status: success ? 'success' : 'failed',
             body: {}
         };
 
-        if (text !== null) {
+        if (text) {
             response.body.text = text;
         }
 
-        if (data !== null) {
+        if (data) {
             response.body.data = data;
         }
 
