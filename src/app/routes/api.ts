@@ -1,5 +1,3 @@
-'use strict';
-
 import { Router } from 'express';
 import AuthController from '@controllers/AuthController';
 import AuthorController from '@controllers/AuthorController';

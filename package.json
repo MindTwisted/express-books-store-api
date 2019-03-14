@@ -50,7 +50,6 @@
     "@services": "build/app/services",
     "@errors": "build/app/errors",
     "@repositories": "build/app/repositories",
-    "@routes": "build/app/routes",
-    "@interfaces": "build/app/interfaces"
+    "@routes": "build/app/routes"
   }
 }

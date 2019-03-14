@@ -1,5 +1,3 @@
-'use strict';
-
 import bcrypt from 'bcrypt';
 import View from '@views/index';
 import db from '@models/index';
@@ -16,7 +14,7 @@ class AuthController {
      * @param res 
      * @param next 
      */
-    current(req: any, res: any, next: Function) {
+    current(req: any, res: any, next: Function): void {
         const user = req.user;
         const data = {
             user
@@ -32,7 +30,7 @@ class AuthController {
      * @param res 
      * @param next 
      */
-    register(req: any, res: any, next: Function) {
+    register(req: any, res: any, next: Function): void {
         const body = req.body;
 
         User.create({
@@ -57,7 +55,7 @@ class AuthController {
      * @param res 
      * @param next 
      */
-    login(req: any, res: any, next: Function) {
+    login(req: any, res: any, next: Function): void {
         const body = req.body;
         const email = body.email;
         const password = body.password;

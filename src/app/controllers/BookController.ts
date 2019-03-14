@@ -1,5 +1,3 @@
-'use strict';
-
 import View from '@views/index';
 import BookRepository from '@repositories/BookRepository';
 import ControllerInterface from '@interfaces/ControllerInterface';
@@ -13,7 +11,7 @@ class BookController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    index(req: any, res: any, next: Function) {
+    index(req: any, res: any, next: Function): void {
         const {offset, search, authors, genres} = req.query;
 
         BookRepository.findAll({
@@ -38,7 +36,7 @@ class BookController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    show(req: any, res: any, next: Function) {
+    show(req: any, res: any, next: Function): void {
         
     }
 
@@ -49,7 +47,7 @@ class BookController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    store(req: any, res: any, next: Function) {
+    store(req: any, res: any, next: Function): void {
         
     }
 
@@ -60,7 +58,7 @@ class BookController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    update(req: any, res: any, next: Function) {
+    update(req: any, res: any, next: Function): void {
         
     }
 
@@ -71,7 +69,7 @@ class BookController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    destroy(req: any, res: any, next: Function) {
+    destroy(req: any, res: any, next: Function): void {
         
     }
 

@@ -1,5 +1,3 @@
-'use strict';
-
 import View from '@views/index';
 import AuthorRepository from '@repositories/AuthorRepository';
 import ControllerInterface from '@interfaces/ControllerInterface';
@@ -13,7 +11,7 @@ class AuthorController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    index(req: any, res: any, next: Function) {
+    index(req: any, res: any, next: Function): void {
         AuthorRepository.findAll({
                 offset: req.query.offset    
             })
@@ -33,7 +31,7 @@ class AuthorController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    show(req: any, res: any, next: Function) {
+    show(req: any, res: any, next: Function): void {
         AuthorRepository.findOne({
                 id: req.params.id
             })
@@ -53,7 +51,7 @@ class AuthorController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    store(req: any, res: any, next: Function) {
+    store(req: any, res: any, next: Function): void {
         AuthorRepository.create({
                 name: req.body.name    
             })
@@ -74,7 +72,7 @@ class AuthorController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    update(req: any, res: any, next: Function) {
+    update(req: any, res: any, next: Function): void {
         AuthorRepository.update({
                 id: req.params.id,
                 name: req.body.name    
@@ -96,7 +94,7 @@ class AuthorController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    destroy(req: any, res: any, next: Function) {
+    destroy(req: any, res: any, next: Function): void {
         AuthorRepository.delete({
                 id: req.params.id    
             })

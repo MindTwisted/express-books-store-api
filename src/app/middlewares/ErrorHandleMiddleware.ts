@@ -1,5 +1,3 @@
-'use strict';
-
 import View from '@views/index';
 import ValidationErrorSerializer from '@serializers/ValidationErrorSerializer';
 

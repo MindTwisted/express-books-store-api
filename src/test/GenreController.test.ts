@@ -1,5 +1,3 @@
-'use strict';
-
 require('./init');
 
 process.env.NODE_ENV = 'test';

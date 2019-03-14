@@ -1,5 +1,3 @@
-'use strict';
-
 import View from '@views/index';
 
 export default (req: any, res: any, next: Function) => {

@@ -1,5 +1,3 @@
-'use strict';
-
 const spawn = require('child-process-promise').spawn;
 const spawnOptions = { stdio: 'inherit' };
 

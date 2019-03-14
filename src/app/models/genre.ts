@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = (sequelize: any, DataTypes: any) => {
     const Genre = sequelize.define('Genre', {
         name: {

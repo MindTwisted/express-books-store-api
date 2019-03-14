@@ -1,11 +1,9 @@
-'use strict';
-
 interface ControllerInterface {
-    index(req: any, res: any, next: Function): any;
-    show(req: any, res: any, next: Function): any;
-    store(req: any, res: any, next: Function): any;
-    update(req: any, res: any, next: Function): any;
-    destroy(req: any, res: any, next: Function): any;
+    index(req: any, res: any, next: Function): void;
+    show(req: any, res: any, next: Function): void;
+    store(req: any, res: any, next: Function): void;
+    update(req: any, res: any, next: Function): void;
+    destroy(req: any, res: any, next: Function): void;
 };
 
 export default ControllerInterface;

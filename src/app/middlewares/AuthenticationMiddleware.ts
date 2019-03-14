@@ -1,5 +1,3 @@
-'use strict';
-
 import JwtService from '@services/JwtService';
 
 export default (req: any, res: any, next: Function) => {

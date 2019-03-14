@@ -1,5 +1,3 @@
-'use strict';
-
 import db from '@models/index';
 import NotFoundError from '@errors/NotFoundError';
 import RepositoryInterface from '@interfaces/RepositoryInterface';

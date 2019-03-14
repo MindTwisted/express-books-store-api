@@ -1,5 +1,3 @@
-'use strict';
-
 import Sequelize from 'sequelize';
 import db from '@models/index';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
