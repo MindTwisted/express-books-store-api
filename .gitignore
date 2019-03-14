@@ -64,3 +64,6 @@ typings/
 # security keys
 private.key
 public.key
+
+# static files
+public

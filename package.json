@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "./node_modules/.bin/tsc-watch --onSuccess \"node ./build/app.js\"",
+    "start": "./node_modules/.bin/tsc-watch --onSuccess \"node ./build/app.js\" --noClear",
     "test": "./node_modules/.bin/mocha ./build/test --timeout 10000 --exit",
     "generate-keys": "node ./bin/generate-keys.js",
     "sequelize": "./node_modules/.bin/sequelize",
