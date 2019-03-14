@@ -3,12 +3,22 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "./node_modules/.bin/nodemon -L ./bin/www",
-    "test": "./node_modules/.bin/mocha --timeout 10000 --exit",
+    "start": "./node_modules/.bin/tsc-watch --onSuccess \"node ./build/app.js\"",
+    "test": "./node_modules/.bin/mocha ./build/test --timeout 10000 --exit",
     "generate-keys": "node ./bin/generate-keys.js",
-    "sequelize": "./node_modules/.bin/sequelize"
+    "sequelize": "./node_modules/.bin/sequelize",
+    "tsc": "./node_modules/.bin/tsc"
   },
   "dependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/chai": "^4.1.7",
+    "@types/cookie-parser": "^1.4.1",
+    "@types/express": "^4.16.1",
+    "@types/jsonwebtoken": "^8.3.2",
+    "@types/mocha": "^5.2.6",
+    "@types/morgan": "^1.7.35",
+    "@types/node": "^11.11.3",
+    "@types/sequelize": "^4.27.41",
     "bcrypt": "^3.0.4",
     "chai": "^4.2.0",
     "chai-each": "0.0.1",
@@ -25,19 +35,22 @@
     "morgan": "~1.9.0",
     "mysql2": "^1.6.5",
     "node-rsa": "^1.0.5",
-    "nodemon": "^1.18.10",
     "sequelize": "^4.43.0",
-    "sequelize-cli": "^5.4.0"
+    "sequelize-cli": "^5.4.0",
+    "tsc-watch": "^2.1.2",
+    "typescript": "^3.3.3333"
   },
   "_moduleAliases": {
     "@root": ".",
-    "@controllers": "app/controllers",
-    "@models": "app/models",
-    "@views": "app/views",
-    "@middlewares": "app/middlewares",
-    "@serializers": "app/serializers",
-    "@services": "app/services",
-    "@errors": "app/errors",
-    "@repositories": "app/repositories"
+    "@controllers": "build/app/controllers",
+    "@models": "build/app/models",
+    "@views": "build/app/views",
+    "@middlewares": "build/app/middlewares",
+    "@serializers": "build/app/serializers",
+    "@services": "build/app/services",
+    "@errors": "build/app/errors",
+    "@repositories": "build/app/repositories",
+    "@routes": "build/app/routes",
+    "@interfaces": "build/app/interfaces"
   }
 }
