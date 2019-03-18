@@ -3,40 +3,35 @@ import JwtService from '@services/JwtService';
 import {User} from '@models/User';
 import UserRepository from '@repositories/UserRepository';
 
-export default (req: any, res: any, next: Function) => {
+export default async (req: any, res: any, next: Function) => {
     const body = req.body;
     const email = body.email;
     const password = body.password;
 
-    if (!email || !password) {
+    if (!(email && password)) {
         return next();
     }
 
-    UserRepository.findOne({
-            email
-        })
-        .then((user: User | null) => {
-            if (!user) {
-                return next();
-            }
+    try {
+        const user: User | null = await UserRepository.findOne({email});
 
-            return bcrypt.compare(password, user.password)
-                .then(result => {
-                    if (!result) {
-                        return next();
-                    }
+        if (!user) {
+            return next();
+        }
 
-                    const token = JwtService.sign({
-                        user
-                    });
+        const result: boolean = await bcrypt.compare(password, user.password);
 
-                    req.user = user;
-                    req.token = token;
+        if (!result) {
+            return next();
+        }
 
-                    return next();
-                });
-        })
-        .catch(error => {
-            next(error);
-        });
+        const token = JwtService.sign({user});
+
+        req.user = user;
+        req.token = token;
+
+        return next();
+    } catch (error) {
+        next(error);
+    }
 }

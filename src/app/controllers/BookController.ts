@@ -12,25 +12,14 @@ class BookController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    index(req: any, res: any, next: Function): void {
-        const {offset, search, authors, genres} = req.query;
+    async index(req: any, res: any, next: Function) {
+        try {
+            const books: Book[] = await BookRepository.findAll(req.query);
 
-        BookRepository.findAll({
-                offset,
-                search,
-                authors,
-                genres    
-            })
-            .then((books: Book[]) => {
-                const data = {
-                    books
-                };
-
-                res.status(200).send(View.generate(null, data));
-            })
-            .catch(error => {
-                next(error);
-            });
+            res.status(200).send(View.generate(null, {books}));
+        } catch (error) {
+            next(error);
+        }     
     }
 
     /**

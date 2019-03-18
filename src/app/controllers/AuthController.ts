@@ -13,11 +13,8 @@ class AuthController {
      */
     current(req: any, res: any, next: Function): void {
         const user: User = req.user;
-        const data = {
-            user
-        };
 
-        res.status(200).send(View.generate(null, data));
+        res.status(200).send(View.generate(null, {user}));
     }
     
     /**
@@ -27,25 +24,14 @@ class AuthController {
      * @param res 
      * @param next 
      */
-    register(req: any, res: any, next: Function): void {
-        const body = req.body;
+    async register(req: any, res: any, next: Function) {
+        try {
+            const user: User = await UserRepository.create(req.body);
 
-        UserRepository.create({
-                name: body.name,
-                email: body.email,
-                password: body.password
-            })
-            .then((user: User) => {
-                const text = 'User was successfully registered.';
-                const data = {
-                    user
-                };
-
-                res.status(200).send(View.generate(text, data));
-            })
-            .catch(error => {
-                next(error);
-            });
+            res.status(200).send(View.generate('User was successfully registered.', {user}));
+        } catch (error) {
+            next(error);
+        }
     }
 
     /**
@@ -59,17 +45,11 @@ class AuthController {
         const user: User = req.user;
         const token: string = req.token;
 
-        if (!user || !token) {
+        if (!(user && token)) {
             return res.status(403).send(View.generate("Invalid credentials.", null, false));
         }
 
-        const text = `User ${user.name} was successfully logged in.`;
-        const data = {
-            user,
-            token
-        };
-
-        res.status(200).send(View.generate(text, data));
+        res.status(200).send(View.generate(`User ${user.name} was successfully logged in.`, {user, token}));
     }
     
 }

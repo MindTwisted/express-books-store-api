@@ -9,6 +9,7 @@ export default (err: any, req: any, res: any, next: Function) => {
     switch (err.name) {
         case 'SequelizeConnectionRefusedError':
         case 'SequelizeDatabaseError':
+        case 'SequelizeConnectionError':
             return res.status(500).send(View.generate(
                 "Unexpected error occurred. Please try again later.", null, false
             ));

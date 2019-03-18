@@ -12,20 +12,14 @@ class GenreController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    index(req: any, res: any, next: Function): void {
-        GenreRepository.findAll({
-                offset: req.query.offset    
-            })
-            .then((genres: Genre[]) => {
-                const data = {
-                    genres
-                };
+    async index(req: any, res: any, next: Function) {
+        try {
+            const genres: Genre[] = await GenreRepository.findAll(req.query);
 
-                res.status(200).send(View.generate(null, data));
-            })
-            .catch(error => {
-                next(error);
-            });
+            res.status(200).send(View.generate(null, {genres}));
+        } catch (error) {
+            next(error);
+        }
     }
 
     /**
@@ -35,18 +29,14 @@ class GenreController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    show(req: any, res: any, next: Function): void {
-        GenreRepository.findOneById(req.params.id )
-            .then((genre: Genre) => {
-                const data = {
-                    genre
-                };
+    async show(req: any, res: any, next: Function) {
+        try {
+            const genre: Genre = await GenreRepository.findOneById(req.params.id);
 
-                res.status(200).send(View.generate(null, data));
-            })
-            .catch(error => {
-                next(error);
-            });
+            res.status(200).send(View.generate(null, {genre}));
+        } catch (error) {
+            next(error);
+        }
     }
 
     /**
@@ -56,21 +46,14 @@ class GenreController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    store(req: any, res: any, next: Function): void {
-        GenreRepository.create({
-                name: req.body.name    
-            })
-            .then((genre: Genre) => {
-                const text = 'Genre was successfully created.';
-                const data = {
-                    genre
-                };
+    async store(req: any, res: any, next: Function) {
+        try {
+            const genre: Genre = await GenreRepository.create(req.body);
 
-                res.status(200).send(View.generate(text, data));
-            })
-            .catch(error => {
-                next(error);
-            });
+            res.status(200).send(View.generate('Genre was successfully created.', {genre}));
+        } catch (error) {
+            next(error);
+        }
     }
 
     /**
@@ -80,22 +63,14 @@ class GenreController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    update(req: any, res: any, next: Function): void {
-        GenreRepository.update({
-                id: req.params.id,
-                name: req.body.name    
-            })
-            .then((genre: Genre) => {
-                const text = 'Genre was successfully updated.';
-                const data = {
-                    genre
-                };
+    async update(req: any, res: any, next: Function) {
+        try {
+            const genre: Genre = await GenreRepository.update({...req.params, ...req.body});
 
-                res.status(200).send(View.generate(text, data));
-            })
-            .catch(error => {
-                next(error);
-            });
+            res.status(200).send(View.generate('Genre was successfully updated.', {genre}));
+        } catch (error) {
+            next(error);
+        }
     }
 
     /**
@@ -105,18 +80,14 @@ class GenreController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    destroy(req: any, res: any, next: Function): void {
-        GenreRepository.delete({
-                id: req.params.id    
-            })
-            .then((genre: Genre) => {
-                const text = `Genre with id ${genre.id} was successfully deleted.`;
+    async destroy(req: any, res: any, next: Function) {
+        try {
+            const genre: Genre = await GenreRepository.delete(req.params);
 
-                res.status(200).send(View.generate(text));
-            })
-            .catch(error => {
-                next(error);
-            });
+            res.status(200).send(View.generate(`Genre with id ${genre.id} was successfully deleted.`));
+        } catch (error) {
+            next(error);
+        }
     }
 
 }

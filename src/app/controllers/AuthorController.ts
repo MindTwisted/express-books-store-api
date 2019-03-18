@@ -12,20 +12,14 @@ class AuthorController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    index(req: any, res: any, next: Function): void {
-        AuthorRepository.findAll({
-                offset: req.query.offset    
-            })
-            .then((authors: Author[]) => {
-                const data = {
-                    authors
-                };
+    async index(req: any, res: any, next: Function) {
+        try {
+            const authors: Author[] = await AuthorRepository.findAll(req.query);
 
-                res.status(200).send(View.generate(null, data));
-            })
-            .catch(error => {
-                next(error);
-            });
+            res.status(200).send(View.generate(null, {authors}));
+        } catch (error) {
+            next(error);
+        }
     }
 
     /**
@@ -35,18 +29,14 @@ class AuthorController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    show(req: any, res: any, next: Function): void {
-        AuthorRepository.findOneById(req.params.id)
-            .then((author: Author) => {
-                const data = {
-                    author
-                };
+    async show(req: any, res: any, next: Function) {
+        try {
+            const author: Author = await AuthorRepository.findOneById(req.params.id);
 
-                res.status(200).send(View.generate(null, data));
-            })
-            .catch(error => {
-                next(error);
-            });
+            res.status(200).send(View.generate(null, {author}));
+        } catch (error) {
+            next(error);
+        }
     }
 
     /**
@@ -56,21 +46,14 @@ class AuthorController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    store(req: any, res: any, next: Function): void {
-        AuthorRepository.create({
-                name: req.body.name    
-            })
-            .then((author: Author) => {
-                const text = 'Author was successfully created.';
-                const data = {
-                    author
-                };
+    async store(req: any, res: any, next: Function) {
+        try {
+            const author: Author = await AuthorRepository.create(req.body);
 
-                res.status(200).send(View.generate(text, data));
-            })
-            .catch(error => {
-                next(error);
-            });
+            res.status(200).send(View.generate('Author was successfully created.', {author}));
+        } catch (error) {
+            next(error);
+        }
     }
 
     /**
@@ -80,22 +63,14 @@ class AuthorController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    update(req: any, res: any, next: Function): void {
-        AuthorRepository.update({
-                id: req.params.id,
-                name: req.body.name    
-            })
-            .then((author: Author) => {
-                const text = 'Author was successfully updated.';
-                const data = {
-                    author
-                };
+    async update(req: any, res: any, next: Function) {
+        try {
+            const author: Author = await AuthorRepository.update({...req.params, ...req.body});
 
-                res.status(200).send(View.generate(text, data));
-            })
-            .catch(error => {
-                next(error);
-            });
+            res.status(200).send(View.generate('Author was successfully updated.', {author}));
+        } catch (error) {
+            next(error);
+        }
     }
 
     /**
@@ -105,18 +80,14 @@ class AuthorController implements ControllerInterface {
      * @param res 
      * @param next 
      */
-    destroy(req: any, res: any, next: Function): void {
-        AuthorRepository.delete({
-                id: req.params.id    
-            })
-            .then((author: Author) => {
-                const text = `Author with id ${author.id} was successfully deleted.`;
+    async destroy(req: any, res: any, next: Function) {
+        try {
+            const author: Author = await AuthorRepository.delete(req.params);
 
-                res.status(200).send(View.generate(text));
-            })
-            .catch(error => {
-                next(error);
-            });
+            res.status(200).send(View.generate(`Author with id ${author.id} was successfully deleted.`));
+        } catch (error) {
+            next(error);
+        }
     }
 
 }
