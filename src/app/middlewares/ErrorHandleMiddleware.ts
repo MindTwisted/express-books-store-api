@@ -20,6 +20,10 @@ export default (err: any, req: any, res: any, next: Function) => {
             ));
         case 'NotFoundError':
             return res.status(404).send(View.generate(err.message, null, false));
+        case 'UnauthorizedError':
+            return res.status(401).send(View.generate(err.message, null, false));
+        case 'ForbiddenError':
+            return res.status(403).send(View.generate(err.message, null, false));
         default:
             return next(err);
     }
