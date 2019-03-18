@@ -36,9 +36,7 @@ class AuthorController implements ControllerInterface {
      * @param next 
      */
     show(req: any, res: any, next: Function): void {
-        AuthorRepository.findOne({
-                id: req.params.id
-            })
+        AuthorRepository.findOneById(req.params.id)
             .then((author: Author) => {
                 const data = {
                     author

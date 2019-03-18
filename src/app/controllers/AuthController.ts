@@ -1,7 +1,6 @@
-import bcrypt from 'bcrypt';
 import View from '@views/index';
 import {User} from '@models/User';
-import JwtService from '@services/JwtService';
+import UserRepository from '@repositories/UserRepository';
 
 class AuthController {
 
@@ -31,7 +30,7 @@ class AuthController {
     register(req: any, res: any, next: Function): void {
         const body = req.body;
 
-        User.create({
+        UserRepository.create({
                 name: body.name,
                 email: body.email,
                 password: body.password
@@ -57,44 +56,20 @@ class AuthController {
      * @param next 
      */
     login(req: any, res: any, next: Function): void {
-        const body = req.body;
-        const email = body.email;
-        const password = body.password;
+        const user: User = req.user;
+        const token: string = req.token;
 
-        if (!email || !password) {
+        if (!user || !token) {
             return res.status(403).send(View.generate("Invalid credentials.", null, false));
         }
 
-        User.findOne({
-                where: {email}
-            })
-            .then((user: User | null) => {
-                if (!user) {
-                    return res.status(403).send(View.generate("Invalid credentials.", null, false));
-                }
+        const text = `User ${user.name} was successfully logged in.`;
+        const data = {
+            user,
+            token
+        };
 
-                return bcrypt.compare(password, user.password)
-                    .then(result => {
-                        if (!result) {
-                            return res.status(403).send(View.generate("Invalid credentials.", null, false));
-                        }
-
-                        const token = JwtService.sign({
-                            user
-                        });
-
-                        const text = `User ${user.name} was successfully logged in.`;
-                        const data = {
-                            user,
-                            token
-                        };
-
-                        res.status(200).send(View.generate(text, data));
-                    })
-            })
-            .catch(error => {
-                next(error);
-            });
+        res.status(200).send(View.generate(text, data));
     }
     
 }

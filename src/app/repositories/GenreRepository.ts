@@ -21,13 +21,11 @@ class GenreRepository implements RepositoryInterface {
     }
 
     /**
-     * Query single genre from DB
+     * Query single genre from DB by id
      * 
      * @param data 
      */
-    findOne(data: any): Bluebird<any> {
-        const {id} = data;
-
+    findOneById(id: number): Bluebird<any> {
         return Genre.findOne({
                 where: {id}
             })
@@ -41,6 +39,15 @@ class GenreRepository implements RepositoryInterface {
     }
 
     /**
+     * Query single genre from DB
+     * 
+     * @param data 
+     */
+    findOne(data: any): Bluebird<any> {
+        return Bluebird.resolve();
+    }
+
+    /**
      * Store genre to DB
      * 
      * @param data 
@@ -48,9 +55,7 @@ class GenreRepository implements RepositoryInterface {
     create(data: any): Bluebird<any> {
         const {name} = data;
 
-        return Genre.create({
-                name
-            });
+        return Genre.create({name});
     }
 
     /**

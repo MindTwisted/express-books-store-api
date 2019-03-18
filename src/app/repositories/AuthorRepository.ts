@@ -21,13 +21,11 @@ class AuthorRepository implements RepositoryInterface {
     }
 
     /**
-     * Query single author from DB
+     * Query single author from DB by id
      * 
      * @param data 
      */
-    findOne(data: any): Bluebird<any> {
-        const {id} = data;
-
+    findOneById(id: number): Bluebird<any> {
         return Author.findOne({
                 where: {id}
             })
@@ -41,6 +39,15 @@ class AuthorRepository implements RepositoryInterface {
     }
 
     /**
+     * Query single author from DB
+     * 
+     * @param data 
+     */
+    findOne(data: any): Bluebird<any> {
+        return Bluebird.resolve();
+    }
+
+    /**
      * Store author to DB
      * 
      * @param data 
@@ -48,9 +55,7 @@ class AuthorRepository implements RepositoryInterface {
     create(data: any): Bluebird<any> {
         const {name} = data;
 
-        return Author.create({
-                name
-            });
+        return Author.create({name});
     }
 
     /**

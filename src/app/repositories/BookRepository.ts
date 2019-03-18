@@ -53,6 +53,15 @@ class BookRepository implements RepositoryInterface {
     }
 
     /**
+     * Query single book from DB by id
+     * 
+     * @param data 
+     */
+    findOneById(id: number): Bluebird<any> {
+        return Bluebird.resolve();
+    }
+
+    /**
      * Query single book from DB
      * 
      * @param data 

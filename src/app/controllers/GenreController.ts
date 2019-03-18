@@ -36,9 +36,7 @@ class GenreController implements ControllerInterface {
      * @param next 
      */
     show(req: any, res: any, next: Function): void {
-        GenreRepository.findOne({
-                id: req.params.id    
-            })
+        GenreRepository.findOneById(req.params.id )
             .then((genre: Genre) => {
                 const data = {
                     genre

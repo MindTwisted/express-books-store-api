@@ -3,6 +3,7 @@ import AuthController from '@controllers/AuthController';
 import AuthorController from '@controllers/AuthorController';
 import GenreController from '@controllers/GenreController';
 import BookController from '@controllers/BookController';
+import LoginMiddleware from '@middlewares/LoginMiddleware';
 import ErrorHandleMiddleware from '@middlewares/ErrorHandleMiddleware';
 import AuthenticationMiddleware from '@middlewares/AuthenticationMiddleware';
 import IsLoggedInMiddleware from '@middlewares/IsLoggedInMiddleware';
@@ -14,7 +15,7 @@ router.use(AuthenticationMiddleware);
 
 router.get('/auth', [IsLoggedInMiddleware], AuthController.current);
 router.post('/auth', AuthController.register);
-router.put('/auth', AuthController.login);
+router.put('/auth', [LoginMiddleware], AuthController.login);
 
 router.get('/authors', AuthorController.index);
 router.get('/authors/:id', AuthorController.show);
