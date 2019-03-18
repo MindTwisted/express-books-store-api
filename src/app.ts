@@ -21,6 +21,6 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/api', apiRouter);
 
-app.listen(port);
+app.listen(port, () => console.info(`Server running on port ${port}.`));
 
 export default app;

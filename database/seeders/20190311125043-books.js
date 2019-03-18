@@ -23,6 +23,17 @@ module.exports = {
             };
         });
 
+        Array.from(Array(10)).map((item, index) => {
+            books.push({
+                title: `Book for testing ${index}`,
+                description: faker.lorem.sentences(5),
+                price: faker.random.number({min: 10, max: 50}),
+                discount: faker.random.number({min: 0, max: 20}),
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
+        });
+
         return queryInterface.bulkInsert('Books', books, {});
     },
 

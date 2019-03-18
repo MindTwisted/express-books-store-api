@@ -135,13 +135,38 @@ describe('booksController', () => {
         });
 
         it('should response with 200 and books title filtered by search string', done => {
-            const searchString = 'lorem';
+            const searchString = 'Book for testing';
 
             agent.get(`${BOOKS_URL}?search=${searchString}`)
                 .end((err: any, res: any) => {
                     res.should.have.status(200);
                     res.body.should.have.property('status').eql('success');
                     res.body.body.data.books.should.be.a('array');
+                    res.body.body.data.books.should.be.a('array').that.have.lengthOf(10);
+                    res.body.body.data.books.should.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('title').that.include(searchString);
+                    res.body.body.data.books.should.each.have.property('description');
+                    res.body.body.data.books.should.each.have.property('imagePath');
+                    res.body.body.data.books.should.each.have.property('price');
+                    res.body.body.data.books.should.each.have.property('discount');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('name');
+                    
+                    done();
+                });
+        });
+
+        it('should response with 200 and books title filtered by search string', done => {
+            const searchString = 'Book for testing 1';
+
+            agent.get(`${BOOKS_URL}?search=${searchString}`)
+                .end((err: any, res: any) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('status').eql('success');
+                    res.body.body.data.books.should.be.a('array');
+                    res.body.body.data.books.should.be.a('array').that.have.lengthOf(1);
                     res.body.body.data.books.should.each.have.property('id');
                     res.body.body.data.books.should.each.have.property('title').that.include(searchString);
                     res.body.body.data.books.should.each.have.property('description');
