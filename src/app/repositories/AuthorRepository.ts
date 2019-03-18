@@ -1,7 +1,10 @@
+import Sequelize, { where } from 'sequelize';
 import Bluebird from 'bluebird';
 import NotFoundError from '@errors/NotFoundError';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
 import {Author} from '@models/Author';
+
+const Op = Sequelize.Op;
 
 class AuthorRepository implements RepositoryInterface {
 
@@ -12,10 +15,13 @@ class AuthorRepository implements RepositoryInterface {
      */
     findAll(data: any): Bluebird<any> {
         const offset = parseInt(data.offset);
+        const search = data.search;
+        const whereClause = search ? {where: {name: {[Op.like]: `%${search}%`}}} : {};
         const offsetClause = offset ? {offset} : {};
 
         return Author.findAll({
                 limit: 50,
+                ...whereClause,
                 ...offsetClause
             });
     }

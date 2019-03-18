@@ -20,6 +20,14 @@ module.exports = {
             };
         });
 
+        Array.from(Array(10)).map((item, index) => {
+            authors.push({
+                name: `Author for testing ${index}`,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
+        });
+
         return queryInterface.bulkInsert('Authors', authors, {});
     },
 

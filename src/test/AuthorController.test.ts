@@ -94,6 +94,36 @@ describe('authorsController', () => {
                 });
         });
 
+        it('should response with 200 and authors filtered by search string', done => {
+            const searchString = 'Author for testing';
+
+            agent.get(`${AUTHORS_URL}?search=${searchString}`)
+                .end((err: any, res: any) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('status').eql('success');
+                    res.body.body.data.authors.should.be.a('array').that.have.lengthOf(10);
+                    res.body.body.data.authors.should.each.have.property('id');
+                    res.body.body.data.authors.should.each.have.property('name');
+                    
+                    done();
+                });
+        });
+
+        it('should response with 200 and authors filtered by search string', done => {
+            const searchString = 'Author for testing 1';
+
+            agent.get(`${AUTHORS_URL}?search=${searchString}`)
+                .end((err: any, res: any) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('status').eql('success');
+                    res.body.body.data.authors.should.be.a('array').that.have.lengthOf(1);
+                    res.body.body.data.authors.should.each.have.property('id');
+                    res.body.body.data.authors.should.each.have.property('name');
+                    
+                    done();
+                });
+        });
+
     });
 
     /**

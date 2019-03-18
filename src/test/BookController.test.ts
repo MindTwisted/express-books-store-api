@@ -134,7 +134,7 @@ describe('booksController', () => {
                 });
         });
 
-        it('should response with 200 and books title filtered by search string', done => {
+        it('should response with 200 and books filtered by search string', done => {
             const searchString = 'Book for testing';
 
             agent.get(`${BOOKS_URL}?search=${searchString}`)
@@ -158,7 +158,7 @@ describe('booksController', () => {
                 });
         });
 
-        it('should response with 200 and books title filtered by search string', done => {
+        it('should response with 200 and books filtered by search string', done => {
             const searchString = 'Book for testing 1';
 
             agent.get(`${BOOKS_URL}?search=${searchString}`)
