@@ -20,6 +20,14 @@ module.exports = {
             };
         });
 
+        Array.from(Array(10)).map((item, index) => {
+            genres.push({
+                name: `Genre for testing ${index}`,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
+        });
+
         return queryInterface.bulkInsert('Genres', genres, {});
     },
 

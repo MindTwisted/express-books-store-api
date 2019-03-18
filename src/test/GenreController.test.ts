@@ -94,6 +94,36 @@ describe('genresController', () => {
                 });
         });
 
+        it('should response with 200 and genres filtered by search string', done => {
+            const searchString = 'Genre for testing';
+
+            agent.get(`${GENRES_URL}?search=${searchString}`)
+                .end((err: any, res: any) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('status').eql('success');
+                    res.body.body.data.genres.should.be.a('array').that.have.lengthOf(10);
+                    res.body.body.data.genres.should.each.have.property('id');
+                    res.body.body.data.genres.should.each.have.property('name');
+                    
+                    done();
+                });
+        });
+
+        it('should response with 200 and genres filtered by search string', done => {
+            const searchString = 'Genre for testing 1';
+
+            agent.get(`${GENRES_URL}?search=${searchString}`)
+                .end((err: any, res: any) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('status').eql('success');
+                    res.body.body.data.genres.should.be.a('array').that.have.lengthOf(1);
+                    res.body.body.data.genres.should.each.have.property('id');
+                    res.body.body.data.genres.should.each.have.property('name');
+                    
+                    done();
+                });
+        });
+
     });
 
     /**

@@ -1,10 +1,8 @@
-import Sequelize, { where } from 'sequelize';
+import {Op} from 'sequelize';
 import Bluebird from 'bluebird';
 import NotFoundError from '@errors/NotFoundError';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
 import {Author} from '@models/Author';
-
-const Op = Sequelize.Op;
 
 class AuthorRepository implements RepositoryInterface {
 

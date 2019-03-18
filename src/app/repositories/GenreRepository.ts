@@ -1,3 +1,4 @@
+import {Op} from 'sequelize';
 import Bluebird from 'bluebird';
 import {Genre} from '@models/Genre';
 import NotFoundError from '@errors/NotFoundError';
@@ -12,10 +13,13 @@ class GenreRepository implements RepositoryInterface {
      */
     findAll(data: any): Bluebird<any> {
         const offset = parseInt(data.offset);
+        const search = data.search;
+        const whereClause = search ? {where: {name: {[Op.like]: `%${search}%`}}} : {};
         const offsetClause = offset ? {offset} : {};
 
         return Genre.findAll({
                 limit: 50,
+                ...whereClause,
                 ...offsetClause
             });
     }

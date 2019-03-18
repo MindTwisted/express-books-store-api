@@ -1,11 +1,9 @@
-import Sequelize from 'sequelize';
+import {Op} from 'sequelize';
 import Bluebird from 'bluebird';
 import {Author} from '@models/Author';
 import {Genre} from '@models/Genre';
 import {Book} from '@models/Book';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
-
-const Op = Sequelize.Op;
 
 class BookRepository implements RepositoryInterface {
 
