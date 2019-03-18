@@ -5,9 +5,12 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import apiRouter from '@routes/api';
+import * as sequelize from '@models/index';
 
 const app: express.Application = express();
 const port: number = Number(process.env.PORT) || 3000;
+
+sequelize.init();
 
 app.set('port', port);
 app.use(logger('dev'));

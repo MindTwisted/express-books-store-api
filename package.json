@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "./node_modules/.bin/tsc-watch --onSuccess \"node ./build/app.js\" --noClear",
-    "test": "./node_modules/.bin/mocha ./build/test --timeout 10000 --exit",
+    "start": "./node_modules/.bin/tsc-watch --noClear --onSuccess \"node ./build/app.js\"",
+    "test": "./node_modules/.bin/mocha ./build/test --timeout 30000 --exit",
     "generate-keys": "node ./bin/generate-keys.js",
     "sequelize": "./node_modules/.bin/sequelize",
     "tsc": "./node_modules/.bin/tsc"
@@ -20,6 +20,7 @@
     "@types/node": "^11.11.3",
     "@types/sequelize": "^4.27.41",
     "bcrypt": "^3.0.4",
+    "bluebird": "^3.5.1",
     "chai": "^4.2.0",
     "chai-each": "0.0.1",
     "chai-http": "^4.2.1",
@@ -35,8 +36,10 @@
     "morgan": "~1.9.0",
     "mysql2": "^1.6.5",
     "node-rsa": "^1.0.5",
-    "sequelize": "^4.43.0",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^5.0.0-beta.16",
     "sequelize-cli": "^5.4.0",
+    "sequelize-typescript": "^1.0.0-alpha.8",
     "tsc-watch": "^2.1.2",
     "typescript": "^3.3.3333"
   },

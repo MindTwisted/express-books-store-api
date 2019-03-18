@@ -1,6 +1,7 @@
 import View from '@views/index';
 import GenreRepository from '@repositories/GenreRepository';
 import ControllerInterface from '@interfaces/ControllerInterface';
+import {Genre} from '@models/Genre';
 
 class GenreController implements ControllerInterface {
 
@@ -15,13 +16,16 @@ class GenreController implements ControllerInterface {
         GenreRepository.findAll({
                 offset: req.query.offset    
             })
-            .then((genres: any) => {
+            .then((genres: Genre[]) => {
                 const data = {
                     genres
                 };
 
                 res.status(200).send(View.generate(null, data));
-            }).catch(next);
+            })
+            .catch(error => {
+                next(error);
+            });
     }
 
     /**
@@ -35,13 +39,16 @@ class GenreController implements ControllerInterface {
         GenreRepository.findOne({
                 id: req.params.id    
             })
-            .then((genre: any) => {
+            .then((genre: Genre) => {
                 const data = {
                     genre
                 };
 
                 res.status(200).send(View.generate(null, data));
-            }).catch(next);
+            })
+            .catch(error => {
+                next(error);
+            });
     }
 
     /**
@@ -55,14 +62,17 @@ class GenreController implements ControllerInterface {
         GenreRepository.create({
                 name: req.body.name    
             })
-            .then((genre: any) => {
+            .then((genre: Genre) => {
                 const text = 'Genre was successfully created.';
                 const data = {
                     genre
                 };
 
                 res.status(200).send(View.generate(text, data));
-            }).catch(next);
+            })
+            .catch(error => {
+                next(error);
+            });
     }
 
     /**
@@ -77,14 +87,17 @@ class GenreController implements ControllerInterface {
                 id: req.params.id,
                 name: req.body.name    
             })
-            .then((genre: any) => {
+            .then((genre: Genre) => {
                 const text = 'Genre was successfully updated.';
                 const data = {
                     genre
                 };
 
                 res.status(200).send(View.generate(text, data));
-            }).catch(next);
+            })
+            .catch(error => {
+                next(error);
+            });
     }
 
     /**
@@ -98,11 +111,14 @@ class GenreController implements ControllerInterface {
         GenreRepository.delete({
                 id: req.params.id    
             })
-            .then((genre: any) => {
+            .then((genre: Genre) => {
                 const text = `Genre with id ${genre.id} was successfully deleted.`;
 
                 res.status(200).send(View.generate(text));
-            }).catch(next);
+            })
+            .catch(error => {
+                next(error);
+            });
     }
 
 }

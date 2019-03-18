@@ -1,20 +1,25 @@
-module.exports = (sequelize: any, DataTypes: any) => {
-    const Author = sequelize.define('Author', {
-        name: {
-            type: DataTypes.STRING,
+import {Model, Column, Table, DataType, BelongsToMany} from "sequelize-typescript";
+import {Book} from '@models/Book';
+import {BookAuthor} from '@models/BookAuthor';
+
+@Table({
+    timestamps: true
+})
+export class Author extends Model<Author> {
+
+    @Column({
+        type: DataType.STRING,
             allowNull: false,
             validate: {
-                len: {
-                    min: 6
-                },
+                len: [6, 255],
                 isUnique(value: any, next: Function) {
-                    Author.find({
+                    Author.findOne({
                             where: {
                                 name: value
                             },
                             attributes: ['id']
                         })
-                        .then((author: any) => {
+                        .then((author: Author | null) => {
                             if (author) {
                                 return next('This author is already exists.');
                             }
@@ -24,21 +29,18 @@ module.exports = (sequelize: any, DataTypes: any) => {
                         .catch(() => next('Unexpected error occurred. Please try again later.'));
                 }
             }
-        }
-    }, {});
+    })
+    name: string;
 
-    Author.associate = function (models: any) {
-        models.Author.belongsToMany(models.Book, {through: 'BookAuthor'});
-    };
+    @BelongsToMany(() => Book, () => BookAuthor)
+    books?: Book[];
 
-    Author.prototype.toJSON = function () {
-        const values = Object.assign({}, this.get());
+    toJSON() {
+        const values: any = Object.assign({}, this.get());
 
         delete values.createdAt;
         delete values.updatedAt;
 
         return values;
     };
-    
-    return Author;
-};
+}

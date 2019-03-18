@@ -1,6 +1,7 @@
 import View from '@views/index';
 import AuthorRepository from '@repositories/AuthorRepository';
 import ControllerInterface from '@interfaces/ControllerInterface';
+import {Author} from '@models/Author';
 
 class AuthorController implements ControllerInterface {
 
@@ -15,13 +16,16 @@ class AuthorController implements ControllerInterface {
         AuthorRepository.findAll({
                 offset: req.query.offset    
             })
-            .then((authors: any) => {
+            .then((authors: Author[]) => {
                 const data = {
                     authors
                 };
 
                 res.status(200).send(View.generate(null, data));
-            }).catch(next);
+            })
+            .catch(error => {
+                next(error);
+            });
     }
 
     /**
@@ -35,13 +39,16 @@ class AuthorController implements ControllerInterface {
         AuthorRepository.findOne({
                 id: req.params.id
             })
-            .then((author: any) => {
+            .then((author: Author) => {
                 const data = {
                     author
                 };
 
                 res.status(200).send(View.generate(null, data));
-            }).catch(next);
+            })
+            .catch(error => {
+                next(error);
+            });
     }
 
     /**
@@ -55,14 +62,17 @@ class AuthorController implements ControllerInterface {
         AuthorRepository.create({
                 name: req.body.name    
             })
-            .then((author: any) => {
+            .then((author: Author) => {
                 const text = 'Author was successfully created.';
                 const data = {
                     author
                 };
 
                 res.status(200).send(View.generate(text, data));
-            }).catch(next);
+            })
+            .catch(error => {
+                next(error);
+            });
     }
 
     /**
@@ -77,14 +87,17 @@ class AuthorController implements ControllerInterface {
                 id: req.params.id,
                 name: req.body.name    
             })
-            .then((author: any) => {
+            .then((author: Author) => {
                 const text = 'Author was successfully updated.';
                 const data = {
                     author
                 };
 
                 res.status(200).send(View.generate(text, data));
-            }).catch(next);
+            })
+            .catch(error => {
+                next(error);
+            });
     }
 
     /**
@@ -98,11 +111,14 @@ class AuthorController implements ControllerInterface {
         AuthorRepository.delete({
                 id: req.params.id    
             })
-            .then((author: any) => {
+            .then((author: Author) => {
                 const text = `Author with id ${author.id} was successfully deleted.`;
 
                 res.status(200).send(View.generate(text));
-            }).catch(next);
+            })
+            .catch(error => {
+                next(error);
+            });
     }
 
 }

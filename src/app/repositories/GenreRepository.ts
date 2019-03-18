@@ -1,8 +1,7 @@
-import db from '@models/index';
+import Bluebird from 'bluebird';
+import {Genre} from '@models/Genre';
 import NotFoundError from '@errors/NotFoundError';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
-
-const Genre = db.Genre;
 
 class GenreRepository implements RepositoryInterface {
 
@@ -11,7 +10,7 @@ class GenreRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    findAll(data: any) {
+    findAll(data: any): Bluebird<any> {
         const offset = parseInt(data.offset);
         const offsetClause = offset ? {offset} : {};
 
@@ -26,18 +25,18 @@ class GenreRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    findOne(data: any) {
+    findOne(data: any): Bluebird<any> {
         const {id} = data;
 
         return Genre.findOne({
                 where: {id}
             })
-            .then((genre: any) => {
+            .then((genre: Genre | null) => {
                 if (!genre) {
-                    return Promise.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
+                    return Bluebird.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
                 }
 
-                return Promise.resolve(genre);
+                return Bluebird.resolve(genre);
             });
     }
 
@@ -46,7 +45,7 @@ class GenreRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    create(data: any) {
+    create(data: any): Bluebird<any> {
         const {name} = data;
 
         return Genre.create({
@@ -59,15 +58,15 @@ class GenreRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    update(data: any) {
+    update(data: any): Bluebird<any> {
         const {id, name} = data;
 
         return Genre.findOne({
                 where: {id}
             })
-            .then((genre: any) => {
+            .then((genre: Genre | null) => {
                 if (!genre) {
-                    return Promise.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
+                    return Bluebird.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
                 }
 
                 genre.name = name;
@@ -81,15 +80,15 @@ class GenreRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    delete(data: any) {
+    delete(data: any): Bluebird<any> {
         const {id} = data;
 
         return Genre.findOne({
                 where: {id}
             })
-            .then((genre: any) => {
+            .then((genre: Genre | null) => {
                 if (!genre) {
-                    return Promise.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
+                    return Bluebird.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
                 }
 
                 return genre.destroy();

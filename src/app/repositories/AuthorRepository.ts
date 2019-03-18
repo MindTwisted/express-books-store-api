@@ -1,8 +1,7 @@
-import db from '@models/index';
+import Bluebird from 'bluebird';
 import NotFoundError from '@errors/NotFoundError';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
-
-const Author = db.Author;
+import {Author} from '@models/Author';
 
 class AuthorRepository implements RepositoryInterface {
 
@@ -11,7 +10,7 @@ class AuthorRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    findAll(data: any) {
+    findAll(data: any): Bluebird<any> {
         const offset = parseInt(data.offset);
         const offsetClause = offset ? {offset} : {};
 
@@ -26,18 +25,18 @@ class AuthorRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    findOne(data: any) {
+    findOne(data: any): Bluebird<any> {
         const {id} = data;
 
         return Author.findOne({
                 where: {id}
             })
-            .then((author: any) => {
+            .then((author: Author | null) => {
                 if (!author) {
-                    return Promise.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
+                    return Bluebird.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
                 }
 
-                return Promise.resolve(author);
+                return Bluebird.resolve(author);
             });
     }
 
@@ -46,7 +45,7 @@ class AuthorRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    create(data: any) {
+    create(data: any): Bluebird<any> {
         const {name} = data;
 
         return Author.create({
@@ -59,15 +58,15 @@ class AuthorRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    update(data: any) {
+    update(data: any): Bluebird<any> {
         const {id, name} = data;
 
         return Author.findOne({
                 where: {id}
             })
-            .then((author: any) => {
+            .then((author: Author | null) => {
                 if (!author) {
-                    return Promise.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
+                    return Bluebird.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
                 }
 
                 author.name = name;
@@ -81,15 +80,15 @@ class AuthorRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    delete(data: any) {
+    delete(data: any): Bluebird<any> {
         const {id} = data;
 
         return Author.findOne({
                 where: {id}
             })
-            .then((author: any) => {
+            .then((author: Author | null) => {
                 if (!author) {
-                    return Promise.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
+                    return Bluebird.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
                 }
 
                 return author.destroy();

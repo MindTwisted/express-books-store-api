@@ -1,6 +1,7 @@
 import View from '@views/index';
 import BookRepository from '@repositories/BookRepository';
 import ControllerInterface from '@interfaces/ControllerInterface';
+import {Book} from '@models/Book';
 
 class BookController implements ControllerInterface {
 
@@ -20,13 +21,16 @@ class BookController implements ControllerInterface {
                 authors,
                 genres    
             })
-            .then((books: any) => {
+            .then((books: Book[]) => {
                 const data = {
                     books
                 };
 
                 res.status(200).send(View.generate(null, data));
-            }).catch(next);
+            })
+            .catch(error => {
+                next(error);
+            });
     }
 
     /**

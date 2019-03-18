@@ -1,11 +1,11 @@
 import Sequelize from 'sequelize';
-import db from '@models/index';
+import Bluebird from 'bluebird';
+import {Author} from '@models/Author';
+import {Genre} from '@models/Genre';
+import {Book} from '@models/Book';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
 
 const Op = Sequelize.Op;
-const Book = db.Book;
-const Author = db.Author;
-const Genre = db.Genre;
 
 class BookRepository implements RepositoryInterface {
 
@@ -14,7 +14,7 @@ class BookRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    findAll(data: any) {
+    findAll(data: any): Bluebird<any> {
         const offset = parseInt(data.offset);
         const search = data.search;
         let authors = data.authors;
@@ -57,8 +57,8 @@ class BookRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    findOne(data: any) {
-        return Promise.resolve();
+    findOne(data: any): Bluebird<any> {
+        return Bluebird.resolve();
     }
 
     /**
@@ -66,8 +66,8 @@ class BookRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    create(data: any) {
-        return Promise.resolve();
+    create(data: any): Bluebird<any> {
+        return Bluebird.resolve();
     }
 
     /**
@@ -75,8 +75,8 @@ class BookRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    update(data: any) {
-        return Promise.resolve();
+    update(data: any): Bluebird<any> {
+        return Bluebird.resolve();
     }
 
     /**
@@ -84,8 +84,8 @@ class BookRepository implements RepositoryInterface {
      * 
      * @param data 
      */
-    delete(data: any) {
-        return Promise.resolve();
+    delete(data: any): Bluebird<any> {
+        return Bluebird.resolve();
     }
 }
 

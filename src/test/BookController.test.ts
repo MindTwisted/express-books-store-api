@@ -36,10 +36,10 @@ describe('booksController', () => {
                     res.body.body.data.books.should.each.have.property('imagePath');
                     res.body.body.data.books.should.each.have.property('price');
                     res.body.body.data.books.should.each.have.property('discount');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('id');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('name');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('id');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('name');
                     res.body.body.data.books[0].should.have.property('id').eql(1);
                     
                     done();
@@ -58,10 +58,10 @@ describe('booksController', () => {
                     res.body.body.data.books.should.each.have.property('imagePath');
                     res.body.body.data.books.should.each.have.property('price');
                     res.body.body.data.books.should.each.have.property('discount');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('id');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('name');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('id');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('name');
                     res.body.body.data.books[0].should.have.property('id').eql(101);
                     
                     done();
@@ -80,10 +80,10 @@ describe('booksController', () => {
                     res.body.body.data.books.should.each.have.property('imagePath');
                     res.body.body.data.books.should.each.have.property('price');
                     res.body.body.data.books.should.each.have.property('discount');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('id');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('name');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('id');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('name');
                     res.body.body.data.books[0].should.have.property('id').eql(101);
                     
                     done();
@@ -102,10 +102,10 @@ describe('booksController', () => {
                     res.body.body.data.books.should.each.have.property('imagePath');
                     res.body.body.data.books.should.each.have.property('price');
                     res.body.body.data.books.should.each.have.property('discount');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('id');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('name');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('id');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('name');
                     res.body.body.data.books[0].should.have.property('id').eql(101);
                     
                     done();
@@ -124,10 +124,10 @@ describe('booksController', () => {
                     res.body.body.data.books.should.each.have.property('imagePath');
                     res.body.body.data.books.should.each.have.property('price');
                     res.body.body.data.books.should.each.have.property('discount');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('id');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('name');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('id');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('name');
                     res.body.body.data.books[0].should.have.property('id').eql(1);
                     
                     done();
@@ -148,10 +148,10 @@ describe('booksController', () => {
                     res.body.body.data.books.should.each.have.property('imagePath');
                     res.body.body.data.books.should.each.have.property('price');
                     res.body.body.data.books.should.each.have.property('discount');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('id');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('name');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('id');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('name');
                     
                     done();
                 });
@@ -171,10 +171,10 @@ describe('booksController', () => {
                     res.body.body.data.books.should.each.have.property('imagePath');
                     res.body.body.data.books.should.each.have.property('price');
                     res.body.body.data.books.should.each.have.property('discount');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('id').that.oneOf(authors);
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('name');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('id');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('id').that.oneOf(authors);
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('name');
                     
                     done();
                 });
@@ -194,10 +194,10 @@ describe('booksController', () => {
                     res.body.body.data.books.should.each.have.property('imagePath');
                     res.body.body.data.books.should.each.have.property('price');
                     res.body.body.data.books.should.each.have.property('discount');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('id');
-                    res.body.body.data.books.should.each.have.property('Authors').that.each.have.property('name');
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('id').that.oneOf(genres);
-                    res.body.body.data.books.should.each.have.property('Genres').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('id').that.oneOf(genres);
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('name');
                     
                     done();
                 });
