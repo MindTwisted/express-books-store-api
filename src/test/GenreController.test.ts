@@ -152,6 +152,65 @@ describe('genresController', () => {
     });
 
     /**
+     * Genres showBooks tests
+     */
+    describe(`GET ${GENRES_URL}/:id/books`, () => {
+        it('should response with 200 and books filtered by genre id', done => {
+            const genreId = 1;
+
+            agent.get(`${GENRES_URL}/${genreId}/books`).end((err: any, res: any) => {
+                res.should.have.status(200);
+                res.body.should.have.property('status').eql('success');
+                res.body.body.data.books.should.be.a('array');
+                res.body.body.data.books.should.each.have.property('id');
+                res.body.body.data.books.should.each.have.property('title');
+                res.body.body.data.books.should.each.have.property('description');
+                res.body.body.data.books.should.each.have.property('imagePath');
+                res.body.body.data.books.should.each.have.property('price');
+                res.body.body.data.books.should.each.have.property('discount');
+                res.body.body.data.books.should.each.have.property('authors').that.each.have.property('id');
+                res.body.body.data.books.should.each.have.property('authors').that.each.have.property('name');
+                res.body.body.data.books.should.each.have
+                    .property('genres')
+                    .that.each.have.property('id')
+                    .that.eql(genreId);
+                res.body.body.data.books.should.each.have.property('genres').that.each.have.property('name');
+
+                done();
+            });
+        });
+
+        it('should response with 200 and books filtered by genre id and shifted by offset', done => {
+            const genreId = 1;
+
+            agent.get(`${GENRES_URL}/${genreId}/books`).end((err: any, res: any) => {
+                const fullLength = res.body.body.data.books.length;
+
+                agent.get(`${GENRES_URL}/${genreId}/books?offset=1`).end((err: any, res: any) => {
+                    res.should.have.status(200);
+                    res.body.should.have.property('status').eql('success');
+                    res.body.body.data.books.should.be.a('array').that.have.lengthOf(fullLength - 1);
+                    res.body.body.data.books.should.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('title');
+                    res.body.body.data.books.should.each.have.property('description');
+                    res.body.body.data.books.should.each.have.property('imagePath');
+                    res.body.body.data.books.should.each.have.property('price');
+                    res.body.body.data.books.should.each.have.property('discount');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('id');
+                    res.body.body.data.books.should.each.have.property('authors').that.each.have.property('name');
+                    res.body.body.data.books.should.each.have
+                        .property('genres')
+                        .that.each.have.property('id')
+                        .that.eql(genreId);
+                    res.body.body.data.books.should.each.have.property('genres').that.each.have.property('name');
+
+                    done();
+                });
+            });
+        });
+    });
+
+    /**
      * Genres store tests
      */
     describe(`POST ${GENRES_URL}`, () => {

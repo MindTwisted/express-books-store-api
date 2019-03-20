@@ -19,12 +19,14 @@ router.put('/auth', [LoginMiddleware], AuthController.login);
 
 router.get('/authors', AuthorController.index);
 router.get('/authors/:id', AuthorController.show);
+router.get('/authors/:id/books', AuthorController.showBooks);
 router.post('/authors', [IsLoggedInMiddleware, IsAdminMiddleware], AuthorController.store);
 router.put('/authors/:id', [IsLoggedInMiddleware, IsAdminMiddleware], AuthorController.update);
 router.delete('/authors/:id', [IsLoggedInMiddleware, IsAdminMiddleware], AuthorController.destroy);
 
 router.get('/genres', GenreController.index);
 router.get('/genres/:id', GenreController.show);
+router.get('/genres/:id/books', GenreController.showBooks);
 router.post('/genres', [IsLoggedInMiddleware, IsAdminMiddleware], GenreController.store);
 router.put('/genres/:id', [IsLoggedInMiddleware, IsAdminMiddleware], GenreController.update);
 router.delete('/genres/:id', [IsLoggedInMiddleware, IsAdminMiddleware], GenreController.destroy);

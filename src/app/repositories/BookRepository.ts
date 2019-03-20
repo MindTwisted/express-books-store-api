@@ -1,8 +1,8 @@
 import { Op } from 'sequelize';
 import Bluebird from 'bluebird';
-import { Author } from '@models/Author';
-import { Genre } from '@models/Genre';
-import { Book } from '@models/Book';
+import Author from '@models/Author';
+import Genre from '@models/Genre';
+import Book from '@models/Book';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
 
 class BookRepository implements RepositoryInterface {

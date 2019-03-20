@@ -1,10 +1,10 @@
 import { Sequelize } from 'sequelize-typescript';
-import { Author } from '@models/Author';
-import { Genre } from '@models/Genre';
-import { Book } from '@models/Book';
-import { BookAuthor } from '@models/BookAuthor';
-import { BookGenre } from '@models/BookGenre';
-import { User } from '@models/User';
+import Author from '@models/Author';
+import Genre from '@models/Genre';
+import Book from '@models/Book';
+import BookAuthor from '@models/BookAuthor';
+import BookGenre from '@models/BookGenre';
+import User from '@models/User';
 
 export const init = () => {
     const env = process.env.NODE_ENV || 'development';

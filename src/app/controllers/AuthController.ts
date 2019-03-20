@@ -1,5 +1,5 @@
 import JsonView from '@views/JsonView';
-import { User } from '@models/User';
+import User from '@models/User';
 import UserRepository from '@repositories/UserRepository';
 
 class AuthController {

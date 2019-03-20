@@ -1,5 +1,5 @@
 import Bluebird from 'bluebird';
-import { User } from '@models/User';
+import User from '@models/User';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
 
 class UserRepository implements RepositoryInterface {

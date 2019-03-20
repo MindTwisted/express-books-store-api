@@ -1,7 +1,9 @@
 import JsonView from '@views/JsonView';
 import AuthorRepository from '@repositories/AuthorRepository';
+import BookRepository from '@repositories/BookRepository';
 import ControllerInterface from '@interfaces/ControllerInterface';
-import { Author } from '@models/Author';
+import Author from '@models/Author';
+import Book from '@models/Book';
 
 class AuthorController implements ControllerInterface {
     /**
@@ -33,6 +35,26 @@ class AuthorController implements ControllerInterface {
             const author: Author = await AuthorRepository.findOneById(req.params.id);
 
             JsonView.render(res, { code: 200, data: { author } });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
+     * Get books by author id
+     *
+     * @param req
+     * @param res
+     * @param next
+     */
+    public async showBooks(req: any, res: any, next: Function) {
+        try {
+            const books: Book[] = await BookRepository.findAll({
+                authors: req.params.id,
+                ...req.query,
+            });
+
+            JsonView.render(res, { code: 200, data: { books } });
         } catch (error) {
             next(error);
         }

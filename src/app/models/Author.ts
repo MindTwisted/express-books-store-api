@@ -1,11 +1,11 @@
 import { Model, Column, Table, DataType, BelongsToMany } from 'sequelize-typescript';
-import { Book } from '@models/Book';
-import { BookAuthor } from '@models/BookAuthor';
+import Book from '@models/Book';
+import BookAuthor from '@models/BookAuthor';
 
 @Table({
     timestamps: true,
 })
-export class Author extends Model<Author> {
+export default class Author extends Model<Author> {
     @Column({
         type: DataType.STRING,
         allowNull: false,

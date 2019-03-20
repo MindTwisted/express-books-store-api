@@ -4,7 +4,7 @@ import { Model, Column, Table, DataType, BeforeSave } from 'sequelize-typescript
 @Table({
     timestamps: true,
 })
-export class User extends Model<User> {
+export default class User extends Model<User> {
     @BeforeSave
     private static hashPassword(instance: User) {
         return bcrypt.hash(instance.password, 10).then((hash: string) => {

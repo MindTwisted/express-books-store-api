@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 import Bluebird from 'bluebird';
 import NotFoundError from '@errors/NotFoundError';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
-import { Author } from '@models/Author';
+import Author from '@models/Author';
 
 class AuthorRepository implements RepositoryInterface {
     /**

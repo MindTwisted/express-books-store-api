@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import JwtService from '@services/JwtService';
-import { User } from '@models/User';
+import User from '@models/User';
 import UserRepository from '@repositories/UserRepository';
 
 export default async (req: any, res: any, next: Function) => {

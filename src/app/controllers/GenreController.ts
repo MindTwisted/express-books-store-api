@@ -1,7 +1,9 @@
 import JsonView from '@views/JsonView';
 import GenreRepository from '@repositories/GenreRepository';
+import BookRepository from '@repositories/BookRepository';
 import ControllerInterface from '@interfaces/ControllerInterface';
-import { Genre } from '@models/Genre';
+import Genre from '@models/Genre';
+import Book from '@models/Book';
 
 class GenreController implements ControllerInterface {
     /**
@@ -33,6 +35,26 @@ class GenreController implements ControllerInterface {
             const genre: Genre = await GenreRepository.findOneById(req.params.id);
 
             JsonView.render(res, { code: 200, data: { genre } });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
+     * Get books by genre id
+     *
+     * @param req
+     * @param res
+     * @param next
+     */
+    public async showBooks(req: any, res: any, next: Function) {
+        try {
+            const books: Book[] = await BookRepository.findAll({
+                genres: req.params.id,
+                ...req.query,
+            });
+
+            JsonView.render(res, { code: 200, data: { books } });
         } catch (error) {
             next(error);
         }

@@ -1,7 +1,7 @@
 import JsonView from '@views/JsonView';
 import BookRepository from '@repositories/BookRepository';
 import ControllerInterface from '@interfaces/ControllerInterface';
-import { Book } from '@models/Book';
+import Book from '@models/Book';
 
 class BookController implements ControllerInterface {
     /**

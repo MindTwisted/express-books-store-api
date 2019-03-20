@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import Bluebird from 'bluebird';
-import { Genre } from '@models/Genre';
+import Genre from '@models/Genre';
 import NotFoundError from '@errors/NotFoundError';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
 

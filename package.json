@@ -5,7 +5,7 @@
   "scripts": {
     "start": "./node_modules/.bin/tsc-watch --onSuccess \"node ./build/app.js\"",
     "test": "./node_modules/.bin/mocha ./build/test --timeout 30000 --exit",
-    "generate-keys": "node ./bin/generate-keys.js",
+    "generate:keys": "node ./bin/generate-keys.js",
     "sequelize": "./node_modules/.bin/sequelize",
     "tsc": "./node_modules/.bin/tsc",
     "lint": "./node_modules/.bin/eslint ./src/**/*",
