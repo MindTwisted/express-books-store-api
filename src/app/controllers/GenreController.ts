@@ -1,4 +1,4 @@
-import View from '@views/index';
+import JsonView from '@views/JsonView';
 import GenreRepository from '@repositories/GenreRepository';
 import ControllerInterface from '@interfaces/ControllerInterface';
 import { Genre } from '@models/Genre';
@@ -15,7 +15,7 @@ class GenreController implements ControllerInterface {
         try {
             const genres: Genre[] = await GenreRepository.findAll(req.query);
 
-            res.status(200).send(View.generate(null, { genres }));
+            JsonView.render(res, { code: 200, data: { genres } });
         } catch (error) {
             next(error);
         }
@@ -32,7 +32,7 @@ class GenreController implements ControllerInterface {
         try {
             const genre: Genre = await GenreRepository.findOneById(req.params.id);
 
-            res.status(200).send(View.generate(null, { genre }));
+            JsonView.render(res, { code: 200, data: { genre } });
         } catch (error) {
             next(error);
         }
@@ -49,7 +49,7 @@ class GenreController implements ControllerInterface {
         try {
             const genre: Genre = await GenreRepository.create(req.body);
 
-            res.status(200).send(View.generate('Genre was successfully created.', { genre }));
+            JsonView.render(res, { code: 200, text: 'Genre was successfully created.', data: { genre } });
         } catch (error) {
             next(error);
         }
@@ -66,7 +66,7 @@ class GenreController implements ControllerInterface {
         try {
             const genre: Genre = await GenreRepository.update({ ...req.params, ...req.body });
 
-            res.status(200).send(View.generate('Genre was successfully updated.', { genre }));
+            JsonView.render(res, { code: 200, text: 'Genre was successfully updated.', data: { genre } });
         } catch (error) {
             next(error);
         }
@@ -83,7 +83,7 @@ class GenreController implements ControllerInterface {
         try {
             const genre: Genre = await GenreRepository.delete(req.params);
 
-            res.status(200).send(View.generate(`Genre with id ${genre.id} was successfully deleted.`));
+            JsonView.render(res, { code: 200, text: `Genre with id ${genre.id} was successfully deleted.` });
         } catch (error) {
             next(error);
         }

@@ -1,4 +1,4 @@
-import View from '@views/index';
+import JsonView from '@views/JsonView';
 import BookRepository from '@repositories/BookRepository';
 import ControllerInterface from '@interfaces/ControllerInterface';
 import { Book } from '@models/Book';
@@ -15,7 +15,7 @@ class BookController implements ControllerInterface {
         try {
             const books: Book[] = await BookRepository.findAll(req.query);
 
-            res.status(200).send(View.generate(null, { books }));
+            JsonView.render(res, { code: 200, data: { books } });
         } catch (error) {
             next(error);
         }

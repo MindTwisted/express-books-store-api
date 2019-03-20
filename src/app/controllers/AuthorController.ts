@@ -1,4 +1,4 @@
-import View from '@views/index';
+import JsonView from '@views/JsonView';
 import AuthorRepository from '@repositories/AuthorRepository';
 import ControllerInterface from '@interfaces/ControllerInterface';
 import { Author } from '@models/Author';
@@ -15,7 +15,7 @@ class AuthorController implements ControllerInterface {
         try {
             const authors: Author[] = await AuthorRepository.findAll(req.query);
 
-            res.status(200).send(View.generate(null, { authors }));
+            JsonView.render(res, { code: 200, data: { authors } });
         } catch (error) {
             next(error);
         }
@@ -32,7 +32,7 @@ class AuthorController implements ControllerInterface {
         try {
             const author: Author = await AuthorRepository.findOneById(req.params.id);
 
-            res.status(200).send(View.generate(null, { author }));
+            JsonView.render(res, { code: 200, data: { author } });
         } catch (error) {
             next(error);
         }
@@ -49,7 +49,7 @@ class AuthorController implements ControllerInterface {
         try {
             const author: Author = await AuthorRepository.create(req.body);
 
-            res.status(200).send(View.generate('Author was successfully created.', { author }));
+            JsonView.render(res, { code: 200, text: 'Author was successfully created.', data: { author } });
         } catch (error) {
             next(error);
         }
@@ -66,7 +66,7 @@ class AuthorController implements ControllerInterface {
         try {
             const author: Author = await AuthorRepository.update({ ...req.params, ...req.body });
 
-            res.status(200).send(View.generate('Author was successfully updated.', { author }));
+            JsonView.render(res, { code: 200, text: 'Author was successfully updated.', data: { author } });
         } catch (error) {
             next(error);
         }
@@ -83,7 +83,7 @@ class AuthorController implements ControllerInterface {
         try {
             const author: Author = await AuthorRepository.delete(req.params);
 
-            res.status(200).send(View.generate(`Author with id ${author.id} was successfully deleted.`));
+            JsonView.render(res, { code: 200, text: `Author with id ${author.id} was successfully deleted.` });
         } catch (error) {
             next(error);
         }

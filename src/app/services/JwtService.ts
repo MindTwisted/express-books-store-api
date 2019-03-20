@@ -8,22 +8,24 @@ const options: any = {
     algorithm: 'RS256',
 };
 
-export default {
-    sign(payload: any) {
+class JwtService {
+    public sign(payload: any) {
         return jwt.sign(payload, privateKey, options);
-    },
+    }
 
-    verify(token: string) {
+    public verify(token: string) {
         try {
             return jwt.verify(token, publicKey, options);
         } catch (err) {
             return false;
         }
-    },
+    }
 
-    decode(token: string) {
+    public decode(token: string) {
         return jwt.decode(token, {
             complete: true,
         });
-    },
-};
+    }
+}
+
+export default new JwtService();

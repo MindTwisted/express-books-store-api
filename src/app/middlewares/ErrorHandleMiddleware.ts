@@ -1,4 +1,4 @@
-import View from '@views/index';
+import JsonView from '@views/JsonView';
 import ValidationErrorSerializer from '@serializers/ValidationErrorSerializer';
 
 export default (err: any, req: any, res: any, next: Function) => {
@@ -10,25 +10,19 @@ export default (err: any, req: any, res: any, next: Function) => {
         case 'SequelizeConnectionRefusedError':
         case 'SequelizeDatabaseError':
         case 'SequelizeConnectionError':
-            return res
-                .status(500)
-                .send(View.generate('Unexpected error occurred. Please try again later.', null, false));
+            return JsonView.render(res, { code: 500, text: 'Unexpected error occurred. Please try again later.' });
         case 'SequelizeValidationError':
-            return res.status(422).send(
-                View.generate(
-                    'Validation failed.',
-                    {
-                        errors: ValidationErrorSerializer.serialize(err.errors),
-                    },
-                    false,
-                ),
-            );
+            return JsonView.render(res, {
+                code: 422,
+                text: 'Validation failed.',
+                data: { errors: ValidationErrorSerializer.serialize(err.errors) },
+            });
         case 'NotFoundError':
-            return res.status(404).send(View.generate(err.message, null, false));
+            return JsonView.render(res, { code: 404, text: err.message });
         case 'UnauthorizedError':
-            return res.status(401).send(View.generate(err.message, null, false));
+            return JsonView.render(res, { code: 401, text: err.message });
         case 'ForbiddenError':
-            return res.status(403).send(View.generate(err.message, null, false));
+            return JsonView.render(res, { code: 403, text: err.message });
         default:
             return next(err);
     }

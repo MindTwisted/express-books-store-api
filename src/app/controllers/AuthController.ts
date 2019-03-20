@@ -1,4 +1,4 @@
-import View from '@views/index';
+import JsonView from '@views/JsonView';
 import { User } from '@models/User';
 import UserRepository from '@repositories/UserRepository';
 
@@ -13,7 +13,7 @@ class AuthController {
     public current(req: any, res: any, next: Function) {
         const user: User = req.user;
 
-        res.status(200).send(View.generate(null, { user }));
+        JsonView.render(res, { code: 200, data: { user } });
     }
 
     /**
@@ -27,7 +27,7 @@ class AuthController {
         try {
             const user: User = await UserRepository.create(req.body);
 
-            res.status(200).send(View.generate('User was successfully registered.', { user }));
+            JsonView.render(res, { code: 200, text: 'User was successfully registered.', data: { user } });
         } catch (error) {
             next(error);
         }
@@ -45,10 +45,14 @@ class AuthController {
         const token: string = req.token;
 
         if (!(user && token)) {
-            return res.status(403).send(View.generate('Invalid credentials.', null, false));
+            return JsonView.render(res, { code: 403, text: 'Invalid credentials.' });
         }
 
-        res.status(200).send(View.generate(`User ${user.name} was successfully logged in.`, { user, token }));
+        JsonView.render(res, {
+            code: 200,
+            text: `User ${user.name} was successfully logged in.`,
+            data: { user, token },
+        });
     }
 }
 

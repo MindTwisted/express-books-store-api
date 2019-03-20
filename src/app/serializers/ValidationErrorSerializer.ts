@@ -1,8 +1,10 @@
-export default {
-    serialize(errors: any) {
+import SerializerInterface from '@interfaces/SerializerInterface';
+
+class ValidationErrorSerializer implements SerializerInterface {
+    public serialize(data: any): any {
         const serializedErrors: any = {};
 
-        errors.map((item: any) => {
+        data.map((item: any) => {
             const fieldName = item.path;
             const validationMessage = item.message;
 
@@ -14,5 +16,7 @@ export default {
         });
 
         return serializedErrors;
-    },
-};
+    }
+}
+
+export default new ValidationErrorSerializer();
