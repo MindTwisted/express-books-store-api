@@ -4,16 +4,15 @@ const spawnOptions = { stdio: 'inherit' };
 /**
  * Prepare before tests
  */
-before(done => {
-    spawn('npm', ['run', 'sequelize', 'db:create'], spawnOptions)
-        .then(() => spawn('npm', ['run', 'sequelize', 'db:migrate'], spawnOptions))
-        .then(() => spawn('npm', ['run', 'sequelize', 'db:seed:all'], spawnOptions))
-        .then(() => done());
+before(async () => {
+    await spawn('npm', ['run', 'sequelize', 'db:create'], spawnOptions);
+    await spawn('npm', ['run', 'sequelize', 'db:migrate'], spawnOptions);
+    await spawn('npm', ['run', 'sequelize', 'db:seed:all'], spawnOptions);
 });
 
 /**
  * Tear down after tests
  */
-after(done => {
-    spawn('npm', ['run', 'sequelize', 'db:drop'], spawnOptions).then(() => done());
+after(async () => {
+    await spawn('npm', ['run', 'sequelize', 'db:drop'], spawnOptions);
 });
