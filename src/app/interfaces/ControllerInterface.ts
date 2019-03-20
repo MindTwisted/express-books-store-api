@@ -4,6 +4,6 @@ interface ControllerInterface {
     store(req: any, res: any, next: Function): void;
     update(req: any, res: any, next: Function): void;
     destroy(req: any, res: any, next: Function): void;
-};
+}
 
 export default ControllerInterface;

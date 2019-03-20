@@ -10,15 +10,19 @@ export default (err: any, req: any, res: any, next: Function) => {
         case 'SequelizeConnectionRefusedError':
         case 'SequelizeDatabaseError':
         case 'SequelizeConnectionError':
-            return res.status(500).send(View.generate(
-                "Unexpected error occurred. Please try again later.", null, false
-            ));
+            return res
+                .status(500)
+                .send(View.generate('Unexpected error occurred. Please try again later.', null, false));
         case 'SequelizeValidationError':
-            return res.status(422).send(View.generate(
-                "Validation failed.", {
-                    errors: ValidationErrorSerializer.serialize(err.errors)
-                }, false
-            ));
+            return res.status(422).send(
+                View.generate(
+                    'Validation failed.',
+                    {
+                        errors: ValidationErrorSerializer.serialize(err.errors),
+                    },
+                    false,
+                ),
+            );
         case 'NotFoundError':
             return res.status(404).send(View.generate(err.message, null, false));
         case 'UnauthorizedError':

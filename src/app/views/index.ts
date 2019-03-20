@@ -4,7 +4,7 @@ export default {
     generate(text: string | null, data?: object | null, success = true): JsonResponseType {
         const response: any = {
             status: success ? 'success' : 'failed',
-            body: {}
+            body: {},
         };
 
         if (text) {
@@ -16,5 +16,5 @@ export default {
         }
 
         return response;
-    }
+    },
 };

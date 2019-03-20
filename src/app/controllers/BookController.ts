@@ -1,71 +1,61 @@
 import View from '@views/index';
 import BookRepository from '@repositories/BookRepository';
 import ControllerInterface from '@interfaces/ControllerInterface';
-import {Book} from '@models/Book';
+import { Book } from '@models/Book';
 
 class BookController implements ControllerInterface {
-
     /**
      * Get all books
-     * 
-     * @param req 
-     * @param res 
-     * @param next 
+     *
+     * @param req
+     * @param res
+     * @param next
      */
-    async index(req: any, res: any, next: Function) {
+    public async index(req: any, res: any, next: Function) {
         try {
             const books: Book[] = await BookRepository.findAll(req.query);
 
-            res.status(200).send(View.generate(null, {books}));
+            res.status(200).send(View.generate(null, { books }));
         } catch (error) {
             next(error);
-        }     
+        }
     }
 
     /**
      * Get book by id
-     * 
-     * @param req 
-     * @param res 
-     * @param next 
+     *
+     * @param req
+     * @param res
+     * @param next
      */
-    show(req: any, res: any, next: Function): void {
-        
-    }
+    public show(req: any, res: any, next: Function) {}
 
     /**
      * Create new book
-     * 
-     * @param req 
-     * @param res 
-     * @param next 
+     *
+     * @param req
+     * @param res
+     * @param next
      */
-    store(req: any, res: any, next: Function): void {
-        
-    }
+    public store(req: any, res: any, next: Function) {}
 
     /**
      * Update book
-     * 
-     * @param req 
-     * @param res 
-     * @param next 
+     *
+     * @param req
+     * @param res
+     * @param next
      */
-    update(req: any, res: any, next: Function): void {
-        
-    }
+    public update(req: any, res: any, next: Function) {}
 
     /**
      * Delete book
-     * 
-     * @param req 
-     * @param res 
-     * @param next 
+     *
+     * @param req
+     * @param res
+     * @param next
      */
-    destroy(req: any, res: any, next: Function): void {
-        
-    }
-
+    public destroy(req: any, res: any, next: Function) {}
 }
 
 export default new BookController();

@@ -1,107 +1,103 @@
-import {Op} from 'sequelize';
+import { Op } from 'sequelize';
 import Bluebird from 'bluebird';
-import {Genre} from '@models/Genre';
+import { Genre } from '@models/Genre';
 import NotFoundError from '@errors/NotFoundError';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
 
 class GenreRepository implements RepositoryInterface {
-
     /**
      * Query all genres from DB
-     * 
-     * @param data 
+     *
+     * @param data
      */
-    findAll(data: any): Bluebird<any> {
+    public findAll(data: any): Bluebird<any> {
         const offset = parseInt(data.offset);
         const search = data.search;
-        const whereClause = search ? {where: {name: {[Op.like]: `%${search}%`}}} : {};
-        const offsetClause = offset ? {offset} : {};
+        const whereClause = search ? { where: { name: { [Op.like]: `%${search}%` } } } : {};
+        const offsetClause = offset ? { offset } : {};
 
         return Genre.findAll({
-                limit: 50,
-                ...whereClause,
-                ...offsetClause
-            });
+            limit: 50,
+            ...whereClause,
+            ...offsetClause,
+        });
     }
 
     /**
      * Query single genre from DB by id
-     * 
-     * @param data 
+     *
+     * @param data
      */
-    findOneById(id: number): Bluebird<any> {
+    public findOneById(id: number): Bluebird<any> {
         return Genre.findOne({
-                where: {id}
-            })
-            .then((genre: Genre | null) => {
-                if (!genre) {
-                    return Bluebird.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
-                }
+            where: { id },
+        }).then((genre: Genre | null) => {
+            if (!genre) {
+                return Bluebird.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
+            }
 
-                return Bluebird.resolve(genre);
-            });
+            return Bluebird.resolve(genre);
+        });
     }
 
     /**
      * Query single genre from DB
-     * 
-     * @param data 
+     *
+     * @param data
      */
-    findOne(data: any): Bluebird<any> {
+    public findOne(data: any): Bluebird<any> {
         return Bluebird.resolve();
     }
 
     /**
      * Store genre to DB
-     * 
-     * @param data 
+     *
+     * @param data
      */
-    create(data: any): Bluebird<any> {
-        const {name} = data;
+    public create(data: any): Bluebird<any> {
+        const { name } = data;
 
-        return Genre.create({name});
+        return Genre.create({ name });
     }
 
     /**
      * Update genre in DB
-     * 
-     * @param data 
+     *
+     * @param data
      */
-    update(data: any): Bluebird<any> {
-        const {id, name} = data;
+    public update(data: any): Bluebird<any> {
+        const { id, name } = data;
 
         return Genre.findOne({
-                where: {id}
-            })
-            .then((genre: Genre | null) => {
-                if (!genre) {
-                    return Bluebird.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
-                }
+            where: { id },
+        }).then((genre: Genre | null) => {
+            if (!genre) {
+                return Bluebird.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
+            }
 
-                genre.name = name;
+            genre.name = name;
 
-                return genre.save();
-            });
+            return genre.save();
+        });
     }
 
     /**
      * Delete genre from DB
-     * 
-     * @param data 
+     *
+     * @param data
      */
-    delete(data: any): Bluebird<any> {
-        const {id} = data;
+    public delete(data: any): Bluebird<any> {
+        const { id } = data;
 
         return Genre.findOne({
-                where: {id}
-            })
-            .then((genre: Genre | null) => {
-                if (!genre) {
-                    return Bluebird.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
-                }
+            where: { id },
+        }).then((genre: Genre | null) => {
+            if (!genre) {
+                return Bluebird.reject(new NotFoundError(`Genre with id ${id} doesn't exist.`));
+            }
 
-                return genre.destroy();
-            });
+            return genre.destroy();
+        });
     }
 }
 

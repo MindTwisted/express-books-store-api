@@ -1,107 +1,103 @@
-import {Op} from 'sequelize';
+import { Op } from 'sequelize';
 import Bluebird from 'bluebird';
 import NotFoundError from '@errors/NotFoundError';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
-import {Author} from '@models/Author';
+import { Author } from '@models/Author';
 
 class AuthorRepository implements RepositoryInterface {
-
     /**
      * Query all authors from DB
-     * 
-     * @param data 
+     *
+     * @param data
      */
-    findAll(data: any): Bluebird<any> {
+    public findAll(data: any): Bluebird<any> {
         const offset = parseInt(data.offset);
         const search = data.search;
-        const whereClause = search ? {where: {name: {[Op.like]: `%${search}%`}}} : {};
-        const offsetClause = offset ? {offset} : {};
+        const whereClause = search ? { where: { name: { [Op.like]: `%${search}%` } } } : {};
+        const offsetClause = offset ? { offset } : {};
 
         return Author.findAll({
-                limit: 50,
-                ...whereClause,
-                ...offsetClause
-            });
+            limit: 50,
+            ...whereClause,
+            ...offsetClause,
+        });
     }
 
     /**
      * Query single author from DB by id
-     * 
-     * @param data 
+     *
+     * @param data
      */
-    findOneById(id: number): Bluebird<any> {
+    public findOneById(id: number): Bluebird<any> {
         return Author.findOne({
-                where: {id}
-            })
-            .then((author: Author | null) => {
-                if (!author) {
-                    return Bluebird.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
-                }
+            where: { id },
+        }).then((author: Author | null) => {
+            if (!author) {
+                return Bluebird.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
+            }
 
-                return Bluebird.resolve(author);
-            });
+            return Bluebird.resolve(author);
+        });
     }
 
     /**
      * Query single author from DB
-     * 
-     * @param data 
+     *
+     * @param data
      */
-    findOne(data: any): Bluebird<any> {
+    public findOne(data: any): Bluebird<any> {
         return Bluebird.resolve();
     }
 
     /**
      * Store author to DB
-     * 
-     * @param data 
+     *
+     * @param data
      */
-    create(data: any): Bluebird<any> {
-        const {name} = data;
+    public create(data: any): Bluebird<any> {
+        const { name } = data;
 
-        return Author.create({name});
+        return Author.create({ name });
     }
 
     /**
      * Update author in DB
-     * 
-     * @param data 
+     *
+     * @param data
      */
-    update(data: any): Bluebird<any> {
-        const {id, name} = data;
+    public update(data: any): Bluebird<any> {
+        const { id, name } = data;
 
         return Author.findOne({
-                where: {id}
-            })
-            .then((author: Author | null) => {
-                if (!author) {
-                    return Bluebird.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
-                }
+            where: { id },
+        }).then((author: Author | null) => {
+            if (!author) {
+                return Bluebird.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
+            }
 
-                author.name = name;
+            author.name = name;
 
-                return author.save();
-            });
+            return author.save();
+        });
     }
 
     /**
      * Delete author from DB
-     * 
-     * @param data 
+     *
+     * @param data
      */
-    delete(data: any): Bluebird<any> {
-        const {id} = data;
+    public delete(data: any): Bluebird<any> {
+        const { id } = data;
 
         return Author.findOne({
-                where: {id}
-            })
-            .then((author: Author | null) => {
-                if (!author) {
-                    return Bluebird.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
-                }
+            where: { id },
+        }).then((author: Author | null) => {
+            if (!author) {
+                return Bluebird.reject(new NotFoundError(`Author with id ${id} doesn't exist.`));
+            }
 
-                return author.destroy();
-            });
+            return author.destroy();
+        });
     }
 }
 

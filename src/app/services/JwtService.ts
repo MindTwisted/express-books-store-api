@@ -4,8 +4,8 @@ import jwt from 'jsonwebtoken';
 const privateKey = fs.readFileSync('private.key', 'utf8');
 const publicKey = fs.readFileSync('public.key', 'utf8');
 const options: any = {
-    expiresIn: "1h",
-    algorithm: "RS256"
+    expiresIn: '1h',
+    algorithm: 'RS256',
 };
 
 export default {
@@ -23,7 +23,7 @@ export default {
 
     decode(token: string) {
         return jwt.decode(token, {
-            complete: true
+            complete: true,
         });
-    }
-}
+    },
+};

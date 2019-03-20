@@ -15,6 +15,5 @@ before(done => {
  * Tear down after tests
  */
 after(done => {
-    spawn('npm', ['run', 'sequelize', 'db:drop'], spawnOptions)
-        .then(() => done());
+    spawn('npm', ['run', 'sequelize', 'db:drop'], spawnOptions).then(() => done());
 });

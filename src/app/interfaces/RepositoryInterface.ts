@@ -7,6 +7,6 @@ interface RepositoryInterface {
     create(data: any): Bluebird<any>;
     update(data: any): Bluebird<any>;
     delete(data: any): Bluebird<any>;
-};
+}
 
 export default RepositoryInterface;

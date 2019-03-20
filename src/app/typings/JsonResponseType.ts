@@ -1,7 +1,7 @@
-type JsonResponseType = {
-    status: boolean,
-    text?: string,
-    data?: any
+interface JsonResponseType {
+    status: boolean;
+    text?: string;
+    data?: any;
 }
 
 export default JsonResponseType;

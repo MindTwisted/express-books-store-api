@@ -1,22 +1,21 @@
 import View from '@views/index';
 import AuthorRepository from '@repositories/AuthorRepository';
 import ControllerInterface from '@interfaces/ControllerInterface';
-import {Author} from '@models/Author';
+import { Author } from '@models/Author';
 
 class AuthorController implements ControllerInterface {
-
     /**
      * Get all authors
-     * 
-     * @param req 
-     * @param res 
-     * @param next 
+     *
+     * @param req
+     * @param res
+     * @param next
      */
-    async index(req: any, res: any, next: Function) {
+    public async index(req: any, res: any, next: Function) {
         try {
             const authors: Author[] = await AuthorRepository.findAll(req.query);
 
-            res.status(200).send(View.generate(null, {authors}));
+            res.status(200).send(View.generate(null, { authors }));
         } catch (error) {
             next(error);
         }
@@ -24,16 +23,16 @@ class AuthorController implements ControllerInterface {
 
     /**
      * Get author by id
-     * 
-     * @param req 
-     * @param res 
-     * @param next 
+     *
+     * @param req
+     * @param res
+     * @param next
      */
-    async show(req: any, res: any, next: Function) {
+    public async show(req: any, res: any, next: Function) {
         try {
             const author: Author = await AuthorRepository.findOneById(req.params.id);
 
-            res.status(200).send(View.generate(null, {author}));
+            res.status(200).send(View.generate(null, { author }));
         } catch (error) {
             next(error);
         }
@@ -41,16 +40,16 @@ class AuthorController implements ControllerInterface {
 
     /**
      * Create new author
-     * 
-     * @param req 
-     * @param res 
-     * @param next 
+     *
+     * @param req
+     * @param res
+     * @param next
      */
-    async store(req: any, res: any, next: Function) {
+    public async store(req: any, res: any, next: Function) {
         try {
             const author: Author = await AuthorRepository.create(req.body);
 
-            res.status(200).send(View.generate('Author was successfully created.', {author}));
+            res.status(200).send(View.generate('Author was successfully created.', { author }));
         } catch (error) {
             next(error);
         }
@@ -58,16 +57,16 @@ class AuthorController implements ControllerInterface {
 
     /**
      * Update author
-     * 
-     * @param req 
-     * @param res 
-     * @param next 
+     *
+     * @param req
+     * @param res
+     * @param next
      */
-    async update(req: any, res: any, next: Function) {
+    public async update(req: any, res: any, next: Function) {
         try {
-            const author: Author = await AuthorRepository.update({...req.params, ...req.body});
+            const author: Author = await AuthorRepository.update({ ...req.params, ...req.body });
 
-            res.status(200).send(View.generate('Author was successfully updated.', {author}));
+            res.status(200).send(View.generate('Author was successfully updated.', { author }));
         } catch (error) {
             next(error);
         }
@@ -75,12 +74,12 @@ class AuthorController implements ControllerInterface {
 
     /**
      * Delete author
-     * 
-     * @param req 
-     * @param res 
-     * @param next 
+     *
+     * @param req
+     * @param res
+     * @param next
      */
-    async destroy(req: any, res: any, next: Function) {
+    public async destroy(req: any, res: any, next: Function) {
         try {
             const author: Author = await AuthorRepository.delete(req.params);
 
@@ -89,7 +88,6 @@ class AuthorController implements ControllerInterface {
             next(error);
         }
     }
-
 }
 
 export default new AuthorController();

@@ -18,7 +18,7 @@ export default (req: any, res: any, next: Function) => {
     if (!payload) {
         return next();
     }
-    
+
     req.user = payload.user;
 
     return next();

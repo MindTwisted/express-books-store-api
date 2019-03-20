@@ -1,19 +1,25 @@
 import bcrypt from 'bcrypt';
-import {Model, Column, Table, DataType, BeforeSave} from "sequelize-typescript";
+import { Model, Column, Table, DataType, BeforeSave } from 'sequelize-typescript';
 
 @Table({
-    timestamps: true
+    timestamps: true,
 })
 export class User extends Model<User> {
+    @BeforeSave
+    private static hashPassword(instance: User) {
+        return bcrypt.hash(instance.password, 10).then((hash: string) => {
+            instance.password = hash;
+        });
+    }
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         validate: {
-            len: [6, 255]
-        }
+            len: [6, 255],
+        },
     })
-    name: string;
+    public name: string;
 
     @Column({
         type: DataType.STRING,
@@ -22,11 +28,11 @@ export class User extends Model<User> {
             isEmail: true,
             isUnique(value: any, next: any) {
                 User.findOne({
-                        where: {
-                            email: value
-                        },
-                        attributes: ['id']
-                    })
+                    where: {
+                        email: value,
+                    },
+                    attributes: ['id'],
+                })
                     .then((user: User | null) => {
                         if (user) {
                             return next('This email is already in use.');
@@ -35,44 +41,36 @@ export class User extends Model<User> {
                         next();
                     })
                     .catch(() => next('Unexpected error occurred. Please try again later.'));
-            }
-        }
+            },
+        },
     })
-    email: string;
+    public email: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         validate: {
-            len: [6, 255]
-        }
+            len: [6, 255],
+        },
     })
-    password: string;
+    public password: string;
 
     @Column({
         type: DataType.ENUM,
         values: ['admin', 'user'],
         defaultValue: 'user',
-        allowNull: false
+        allowNull: false,
     })
-    role: string;
+    public role: string;
 
     @Column({
         type: DataType.DECIMAL(8, 2),
-        defaultValue: 0.00,
-        allowNull: false
+        defaultValue: 0.0,
+        allowNull: false,
     })
-    discount: number;
+    public discount: number;
 
-    @BeforeSave
-    static hashPassword(instance: User) {
-        return bcrypt.hash(instance.password, 10)
-            .then((hash: string) => {
-                instance.password = hash;
-            });
-    }
-
-    toJSON() {
+    public toJSON() {
         const values: any = Object.assign({}, this.get());
 
         delete values.password;

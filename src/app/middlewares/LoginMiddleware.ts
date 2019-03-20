@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import JwtService from '@services/JwtService';
-import {User} from '@models/User';
+import { User } from '@models/User';
 import UserRepository from '@repositories/UserRepository';
 
 export default async (req: any, res: any, next: Function) => {
@@ -13,7 +13,7 @@ export default async (req: any, res: any, next: Function) => {
     }
 
     try {
-        const user: User | null = await UserRepository.findOne({email});
+        const user: User | null = await UserRepository.findOne({ email });
 
         if (!user) {
             return next();
@@ -25,7 +25,7 @@ export default async (req: any, res: any, next: Function) => {
             return next();
         }
 
-        const token = JwtService.sign({user});
+        const token = JwtService.sign({ user });
 
         req.user = user;
         req.token = token;
@@ -34,4 +34,4 @@ export default async (req: any, res: any, next: Function) => {
     } catch (error) {
         next(error);
     }
-}
+};
