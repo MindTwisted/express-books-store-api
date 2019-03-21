@@ -92,7 +92,9 @@ class BookRepository implements RepositoryInterface {
      * @param data
      */
     public create(data: any): Bluebird<any> {
-        return Bluebird.resolve();
+        const { title, description, price, discount } = data;
+
+        return Book.create({ title, description, price, discount });
     }
 
     /**

@@ -241,4 +241,320 @@ describe('booksController', () => {
             res.body.should.have.property('status').eql('failed');
         });
     });
+
+    /**
+     * Books store tests
+     */
+    describe(`POST ${BOOKS_URL}`, () => {
+        it('should response with 401 if auth token was not provided', async () => {
+            const res = await agent.post(BOOKS_URL);
+
+            res.should.have.status(401);
+            res.body.should.have.property('status').eql('failed');
+        });
+
+        it('should response with 403 if auth token was not owned by admin', async () => {
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'smith@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent.post(BOOKS_URL).set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(403);
+            res.body.should.have.property('status').eql('failed');
+        });
+
+        it('should response with 422 if book title, description and price were not provided', async () => {
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent.post(BOOKS_URL).set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(422);
+            res.body.should.have.property('status').eql('failed');
+            res.body.body.data.errors.should.have.property('title');
+            res.body.body.data.errors.should.have.property('description');
+            res.body.body.data.errors.should.have.property('price');
+        });
+
+        it('should response with 422 if book title was less than 6 characters', async () => {
+            const BOOK_TITLE = 'a'.repeat(5);
+            const BOOK_DESCRIPTION = 'a'.repeat(20);
+            const BOOK_PRICE = 10;
+
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(422);
+            res.body.should.have.property('status').eql('failed');
+            res.body.body.data.errors.should.have.property('title');
+        });
+
+        it('should response with 422 if book title has already existed', async () => {
+            const BOOK_TITLE = 'New Book';
+            const BOOK_DESCRIPTION = 'a'.repeat(20);
+            const BOOK_PRICE = 10;
+
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+
+            await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            const res = await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(422);
+            res.body.should.have.property('status').eql('failed');
+            res.body.body.data.errors.should.have.property('title');
+        });
+
+        it('should response with 422 if book description was less than 20 characters', async () => {
+            const BOOK_TITLE = 'a'.repeat(6);
+            const BOOK_DESCRIPTION = 'a'.repeat(19);
+            const BOOK_PRICE = 10;
+
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(422);
+            res.body.should.have.property('status').eql('failed');
+            res.body.body.data.errors.should.have.property('description');
+        });
+
+        it('should response with 422 if book price was less than 0', async () => {
+            const BOOK_TITLE = 'a'.repeat(6);
+            const BOOK_DESCRIPTION = 'a'.repeat(20);
+            const BOOK_PRICE = -1;
+
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(422);
+            res.body.should.have.property('status').eql('failed');
+            res.body.body.data.errors.should.have.property('price');
+        });
+
+        it('should response with 422 if book price was not numeric', async () => {
+            const BOOK_TITLE = 'a'.repeat(6);
+            const BOOK_DESCRIPTION = 'a'.repeat(20);
+            const BOOK_PRICE = 'abc';
+
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(422);
+            res.body.should.have.property('status').eql('failed');
+            res.body.body.data.errors.should.have.property('price');
+        });
+
+        it('should response with 422 if book price was not numeric', async () => {
+            const BOOK_TITLE = 'a'.repeat(6);
+            const BOOK_DESCRIPTION = 'a'.repeat(20);
+            const BOOK_PRICE = '50,5';
+
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(422);
+            res.body.should.have.property('status').eql('failed');
+            res.body.body.data.errors.should.have.property('price');
+        });
+
+        it('should response with 422 if book discount was less than 0', async () => {
+            const BOOK_TITLE = 'a'.repeat(6);
+            const BOOK_DESCRIPTION = 'a'.repeat(20);
+            const BOOK_PRICE = 10;
+            const BOOK_DISCOUNT = -1;
+
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                    discount: BOOK_DISCOUNT,
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(422);
+            res.body.should.have.property('status').eql('failed');
+            res.body.body.data.errors.should.have.property('discount');
+        });
+
+        it('should response with 422 if book discount was greater than 50', async () => {
+            const BOOK_TITLE = 'a'.repeat(6);
+            const BOOK_DESCRIPTION = 'a'.repeat(20);
+            const BOOK_PRICE = 10;
+            const BOOK_DISCOUNT = 51;
+
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                    discount: BOOK_DISCOUNT,
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(422);
+            res.body.should.have.property('status').eql('failed');
+            res.body.body.data.errors.should.have.property('discount');
+        });
+
+        it('should response with 422 if book discount was not numeric', async () => {
+            const BOOK_TITLE = 'a'.repeat(6);
+            const BOOK_DESCRIPTION = 'a'.repeat(20);
+            const BOOK_PRICE = 10;
+            const BOOK_DISCOUNT = 'abc';
+
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                    discount: BOOK_DISCOUNT,
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(422);
+            res.body.should.have.property('status').eql('failed');
+            res.body.body.data.errors.should.have.property('discount');
+        });
+
+        it('should response with 422 if book discount was not numeric', async () => {
+            const BOOK_TITLE = 'a'.repeat(6);
+            const BOOK_DESCRIPTION = 'a'.repeat(20);
+            const BOOK_PRICE = 10;
+            const BOOK_DISCOUNT = '10,5';
+
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                    discount: BOOK_DISCOUNT,
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(422);
+            res.body.should.have.property('status').eql('failed');
+            res.body.body.data.errors.should.have.property('discount');
+        });
+
+        it('should response with 200 and book if valid data were provided', async () => {
+            const BOOK_TITLE = 'a'.repeat(6);
+            const BOOK_DESCRIPTION = 'a'.repeat(20);
+            const BOOK_PRICE = 10;
+            const BOOK_DISCOUNT = 10;
+
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                    discount: BOOK_DISCOUNT,
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(200);
+            res.body.should.have.property('status').eql('success');
+            res.body.body.data.should.have.property('book');
+            res.body.body.data.book.should.have.property('id');
+            res.body.body.data.book.should.have.property('title');
+            res.body.body.data.book.should.have.property('description');
+            res.body.body.data.book.should.have.property('imagePath');
+            res.body.body.data.book.should.have.property('price');
+            res.body.body.data.book.should.have.property('discount');
+        });
+    });
 });

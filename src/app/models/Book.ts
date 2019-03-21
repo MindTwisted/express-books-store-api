@@ -52,6 +52,10 @@ export default class Book extends Model<Book> {
     @Column({
         type: DataType.DECIMAL(8, 2),
         allowNull: false,
+        validate: {
+            min: 0,
+            isNumeric: true,
+        },
     })
     public price: number;
 
@@ -59,6 +63,11 @@ export default class Book extends Model<Book> {
         type: DataType.DECIMAL(8, 2),
         allowNull: false,
         defaultValue: 0.0,
+        validate: {
+            min: 0,
+            max: 50,
+            isNumeric: true,
+        },
     })
     public discount: number;
 

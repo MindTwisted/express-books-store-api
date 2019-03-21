@@ -45,7 +45,15 @@ class BookController implements ControllerInterface {
      * @param res
      * @param next
      */
-    public store(req: any, res: any, next: Function) {}
+    public async store(req: any, res: any, next: Function) {
+        try {
+            const book: Book = await BookRepository.create(req.body);
+
+            JsonView.render(res, { code: 200, text: 'Book was successfully created.', data: { book } });
+        } catch (error) {
+            next(error);
+        }
+    }
 
     /**
      * Update book
