@@ -32,6 +32,7 @@ router.put('/genres/:id', [IsLoggedInMiddleware, IsAdminMiddleware], GenreContro
 router.delete('/genres/:id', [IsLoggedInMiddleware, IsAdminMiddleware], GenreController.destroy);
 
 router.get('/books', BookController.index);
+router.get('/books/:id', BookController.show);
 
 router.use(ErrorHandleMiddleware);
 

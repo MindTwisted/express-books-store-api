@@ -105,24 +105,27 @@ describe('authorsController', () => {
      */
     describe(`GET ${AUTHORS_URL}/:id`, () => {
         it('should response with 200 and author if author with provided id exists', async () => {
-            const res = await agent.get(`${AUTHORS_URL}/1`);
+            const authorId = 1;
+            const res = await agent.get(`${AUTHORS_URL}/${authorId}`);
 
             res.should.have.status(200);
             res.body.should.have.property('status').eql('success');
             res.body.body.data.should.have.property('author');
-            res.body.body.data.author.should.have.property('id');
+            res.body.body.data.author.should.have.property('id').eql(authorId);
             res.body.body.data.author.should.have.property('name');
         });
 
         it('should response with 404 if author with provided id does not exist', async () => {
-            const res = await agent.get(`${AUTHORS_URL}/999`);
+            const authorId = 999;
+            const res = await agent.get(`${AUTHORS_URL}/${authorId}`);
 
             res.should.have.status(404);
             res.body.should.have.property('status').eql('failed');
         });
 
         it('should response with 404 if author with provided id does not exist', async () => {
-            const res = await agent.get(`${AUTHORS_URL}/abc`);
+            const authorId = 'abc';
+            const res = await agent.get(`${AUTHORS_URL}/${authorId}`);
 
             res.should.have.status(404);
             res.body.should.have.property('status').eql('failed');

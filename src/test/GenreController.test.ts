@@ -105,24 +105,27 @@ describe('genresController', () => {
      */
     describe(`GET ${GENRES_URL}/:id`, () => {
         it('should response with 200 and genre if genre with provided id exists', async () => {
-            const res = await agent.get(`${GENRES_URL}/1`);
+            const genreId = 1;
+            const res = await agent.get(`${GENRES_URL}/${genreId}`);
 
             res.should.have.status(200);
             res.body.should.have.property('status').eql('success');
             res.body.body.data.should.have.property('genre');
-            res.body.body.data.genre.should.have.property('id');
+            res.body.body.data.genre.should.have.property('id').eql(genreId);
             res.body.body.data.genre.should.have.property('name');
         });
 
         it('should response with 404 if genre with provided id does not exist', async () => {
-            const res = await agent.get(`${GENRES_URL}/999`);
+            const genreId = 999;
+            const res = await agent.get(`${GENRES_URL}/${genreId}`);
 
             res.should.have.status(404);
             res.body.should.have.property('status').eql('failed');
         });
 
         it('should response with 404 if genre with provided id does not exist', async () => {
-            const res = await agent.get(`${GENRES_URL}/abc`);
+            const genreId = 'abc';
+            const res = await agent.get(`${GENRES_URL}/${genreId}`);
 
             res.should.have.status(404);
             res.body.should.have.property('status').eql('failed');

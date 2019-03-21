@@ -4,6 +4,7 @@ import Author from '@models/Author';
 import Genre from '@models/Genre';
 import Book from '@models/Book';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
+import NotFoundError from '@errors/NotFoundError';
 
 class BookRepository implements RepositoryInterface {
     /**
@@ -55,7 +56,25 @@ class BookRepository implements RepositoryInterface {
      * @param data
      */
     public findOneById(id: number): Bluebird<any> {
-        return Bluebird.resolve();
+        return Book.findOne({
+            where: { id },
+            include: [
+                {
+                    model: Author,
+                    through: { attributes: [] },
+                },
+                {
+                    model: Genre,
+                    through: { attributes: [] },
+                },
+            ],
+        }).then((book: Book | null) => {
+            if (!book) {
+                return Bluebird.reject(new NotFoundError(`Book with id ${id} doesn't exist.`));
+            }
+
+            return Bluebird.resolve(book);
+        });
     }
 
     /**

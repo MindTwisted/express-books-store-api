@@ -201,4 +201,44 @@ describe('booksController', () => {
             res.body.body.data.books.should.each.have.property('genres').that.each.have.property('name');
         });
     });
+
+    /**
+     * Books show tests
+     */
+    describe(`GET ${BOOKS_URL}/:id`, () => {
+        it('should response with 200 and book if book with provided id exists', async () => {
+            const bookId = 1;
+            const res = await agent.get(`${BOOKS_URL}/${bookId}`);
+
+            res.should.have.status(200);
+            res.body.should.have.property('status').eql('success');
+            res.body.body.data.should.have.property('book');
+            res.body.body.data.book.should.have.property('id').eql(bookId);
+            res.body.body.data.book.should.have.property('title');
+            res.body.body.data.book.should.have.property('description');
+            res.body.body.data.book.should.have.property('imagePath');
+            res.body.body.data.book.should.have.property('price');
+            res.body.body.data.book.should.have.property('discount');
+            res.body.body.data.book.should.have.property('authors').that.each.have.property('id');
+            res.body.body.data.book.should.have.property('authors').that.each.have.property('name');
+            res.body.body.data.book.should.have.property('genres').that.each.have.property('id');
+            res.body.body.data.book.should.have.property('genres').that.each.have.property('name');
+        });
+
+        it('should response with 404 if book with provided id does not exist', async () => {
+            const bookId = 99999;
+            const res = await agent.get(`${BOOKS_URL}/${bookId}`);
+
+            res.should.have.status(404);
+            res.body.should.have.property('status').eql('failed');
+        });
+
+        it('should response with 404 if author with provided id does not exist', async () => {
+            const bookId = 'abc';
+            const res = await agent.get(`${BOOKS_URL}/${bookId}`);
+
+            res.should.have.status(404);
+            res.body.should.have.property('status').eql('failed');
+        });
+    });
 });

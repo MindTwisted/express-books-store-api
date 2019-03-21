@@ -28,7 +28,15 @@ class BookController implements ControllerInterface {
      * @param res
      * @param next
      */
-    public show(req: any, res: any, next: Function) {}
+    public async show(req: any, res: any, next: Function) {
+        try {
+            const book: Book = await BookRepository.findOneById(req.params.id);
+
+            JsonView.render(res, { code: 200, data: { book } });
+        } catch (error) {
+            next(error);
+        }
+    }
 
     /**
      * Create new book
