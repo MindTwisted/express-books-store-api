@@ -1,9 +1,42 @@
-import { Model, Column, Table, DataType, BelongsToMany } from 'sequelize-typescript';
+import { Model, Column, Table, DataType, BelongsToMany, Scopes } from 'sequelize-typescript';
+import { Op } from 'sequelize';
 import Author from '@models/Author';
 import Genre from '@models/Genre';
 import BookAuthor from '@models/BookAuthor';
 import BookGenre from '@models/BookGenre';
 
+@Scopes({
+    full: (data: { authors?: string | string[]; genres?: string | string[] } = {}) => {
+        let { authors, genres } = data;
+        let authorsWhereClause = {};
+        let genresWhereClause = {};
+
+        if (authors) {
+            authors = Array.isArray(authors) ? authors.join(',').split(',') : authors.split(',');
+            authorsWhereClause = { where: { id: { [Op.in]: authors } } };
+        }
+
+        if (genres) {
+            genres = Array.isArray(genres) ? genres.join(',').split(',') : genres.split(',');
+            genresWhereClause = { where: { id: { [Op.in]: genres } } };
+        }
+
+        return {
+            include: [
+                {
+                    model: Author,
+                    through: { attributes: [] },
+                    ...authorsWhereClause,
+                },
+                {
+                    model: Genre,
+                    through: { attributes: [] },
+                    ...genresWhereClause,
+                },
+            ],
+        };
+    },
+})
 @Table({
     timestamps: true,
 })
