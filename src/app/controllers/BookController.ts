@@ -79,7 +79,15 @@ class BookController implements ControllerInterface {
      * @param res
      * @param next
      */
-    public destroy(req: any, res: any, next: Function) {}
+    public async destroy(req: any, res: any, next: Function) {
+        try {
+            const book: Book = await BookRepository.delete(req.params);
+
+            JsonView.render(res, { code: 200, text: `Book with id ${book.id} was successfully deleted.` });
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new BookController();

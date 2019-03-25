@@ -1225,4 +1225,49 @@ describe('booksController', () => {
             res.body.body.data.book.genres.should.be.a('array').that.have.lengthOf(genresIntegerCount);
         });
     });
+
+    /**
+     * Book destroy tests
+     */
+    describe(`DELETE ${BOOKS_URL}/:id`, () => {
+        it('should response with 401 if auth token was not provided', async () => {
+            const res = await agent.delete(`${BOOKS_URL}/1`);
+
+            res.should.have.status(401);
+            res.body.should.have.property('status').eql('failed');
+        });
+
+        it('should response with 403 if auth token was not owned by admin', async () => {
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'smith@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent.delete(`${BOOKS_URL}/1`).set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(403);
+            res.body.should.have.property('status').eql('failed');
+        });
+
+        it('should response with 404 if book with provided id does not exist', async () => {
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent.delete(`${BOOKS_URL}/9999`).set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(404);
+            res.body.should.have.property('status').eql('failed');
+        });
+
+        it('should response with 200 if valid book id was provided', async () => {
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent.delete(`${BOOKS_URL}/1`).set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(200);
+            res.body.should.have.property('status').eql('success');
+        });
+    });
 });

@@ -154,7 +154,17 @@ class BookRepository implements RepositoryInterface {
      * @param data
      */
     public delete(data: any): Bluebird<any> {
-        return Bluebird.resolve();
+        const { id } = data;
+
+        return Book.findOne({
+            where: { id },
+        }).then((book: Book | null) => {
+            if (!book) {
+                return Bluebird.reject(new NotFoundError(`Book with id ${id} doesn't exist.`));
+            }
+
+            return book.destroy();
+        });
     }
 }
 
