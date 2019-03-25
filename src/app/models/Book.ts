@@ -110,6 +110,26 @@ export default class Book extends Model<Book> {
     @BelongsToMany(() => Genre, () => BookGenre)
     public genres?: Genre[];
 
+    public setAuthors(authors: Author[]) {
+        const bulkCreateValues: { bookId: number; authorId: number }[] = authors.map((author: Author) => {
+            return { bookId: this.id, authorId: author.id };
+        });
+
+        return BookAuthor.destroy({ where: { bookId: this.id } }).then(() => {
+            return BookAuthor.bulkCreate(bulkCreateValues);
+        });
+    }
+
+    public setGenres(genres: Genre[]) {
+        const bulkCreateValues: { bookId: number; genreId: number }[] = genres.map((genre: Genre) => {
+            return { bookId: this.id, genreId: genre.id };
+        });
+
+        return BookGenre.destroy({ where: { bookId: this.id } }).then(() => {
+            return BookGenre.bulkCreate(bulkCreateValues);
+        });
+    }
+
     public toJSON() {
         const values: any = Object.assign({}, this.get());
 

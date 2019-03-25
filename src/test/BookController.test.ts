@@ -6,6 +6,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import chaiEach from 'chai-each';
 import server from '../app';
+import { countIntegersInArray } from './utils';
 
 const should = chai.should();
 
@@ -555,6 +556,151 @@ describe('booksController', () => {
             res.body.body.data.book.should.have.property('imagePath');
             res.body.body.data.book.should.have.property('price');
             res.body.body.data.book.should.have.property('discount');
+            res.body.body.data.book.should.have.property('authors');
+            res.body.body.data.book.should.have.property('genres');
+            res.body.body.data.book.authors.should.be.a('array').that.have.lengthOf(0);
+            res.body.body.data.book.genres.should.be.a('array').that.have.lengthOf(0);
+        });
+
+        it('should response with 200 and book with authors and genres if valid data were provided', async () => {
+            const BOOK_TITLE = 'a'.repeat(6) + +Date.now();
+            const BOOK_DESCRIPTION = 'a'.repeat(20);
+            const BOOK_PRICE = 10;
+            const BOOK_DISCOUNT = 10;
+            const BOOK_AUTHORS: any[] = [51, 52, 53];
+            const BOOK_GENRES: any[] = [54, 55];
+
+            const authorsIntegerCount = countIntegersInArray(BOOK_AUTHORS);
+            const genresIntegerCount = countIntegersInArray(BOOK_GENRES);
+
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                    discount: BOOK_DISCOUNT,
+                    authors: BOOK_AUTHORS.join(','),
+                    genres: BOOK_GENRES.join(','),
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(200);
+            res.body.should.have.property('status').eql('success');
+            res.body.body.data.should.have.property('book');
+            res.body.body.data.book.should.have.property('title');
+            res.body.body.data.book.should.have.property('description');
+            res.body.body.data.book.should.have.property('imagePath');
+            res.body.body.data.book.should.have.property('price');
+            res.body.body.data.book.should.have.property('discount');
+            res.body.body.data.book.should.have
+                .property('authors')
+                .that.each.have.property('id')
+                .that.oneOf(BOOK_AUTHORS);
+            res.body.body.data.book.should.have.property('authors').that.each.have.property('name');
+            res.body.body.data.book.should.have
+                .property('genres')
+                .that.each.have.property('id')
+                .that.oneOf(BOOK_GENRES);
+            res.body.body.data.book.should.have.property('genres').that.each.have.property('name');
+            res.body.body.data.book.authors.should.be.a('array').that.have.lengthOf(authorsIntegerCount);
+            res.body.body.data.book.genres.should.be.a('array').that.have.lengthOf(genresIntegerCount);
+        });
+
+        it('should response with 200 and book with authors and genres if valid data were provided', async () => {
+            const BOOK_TITLE = 'a'.repeat(6) + +Date.now();
+            const BOOK_DESCRIPTION = 'a'.repeat(20);
+            const BOOK_PRICE = 10;
+            const BOOK_DISCOUNT = 10;
+            const BOOK_AUTHORS: any[] = [51, 52, 53, 'abc', true];
+            const BOOK_GENRES: any[] = ['abc', false, 55];
+
+            const authorsIntegerCount = countIntegersInArray(BOOK_AUTHORS);
+            const genresIntegerCount = countIntegersInArray(BOOK_GENRES);
+
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                    discount: BOOK_DISCOUNT,
+                    authors: BOOK_AUTHORS.join(','),
+                    genres: BOOK_GENRES.join(','),
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(200);
+            res.body.should.have.property('status').eql('success');
+            res.body.body.data.should.have.property('book');
+            res.body.body.data.book.should.have.property('title');
+            res.body.body.data.book.should.have.property('description');
+            res.body.body.data.book.should.have.property('imagePath');
+            res.body.body.data.book.should.have.property('price');
+            res.body.body.data.book.should.have.property('discount');
+            res.body.body.data.book.should.have
+                .property('authors')
+                .that.each.have.property('id')
+                .that.oneOf(BOOK_AUTHORS);
+            res.body.body.data.book.should.have.property('authors').that.each.have.property('name');
+            res.body.body.data.book.should.have
+                .property('genres')
+                .that.each.have.property('id')
+                .that.oneOf(BOOK_GENRES);
+            res.body.body.data.book.should.have.property('genres').that.each.have.property('name');
+            res.body.body.data.book.authors.should.be.a('array').that.have.lengthOf(authorsIntegerCount);
+            res.body.body.data.book.genres.should.be.a('array').that.have.lengthOf(genresIntegerCount);
+        });
+
+        it('should response with 200 and book with authors and genres if valid data were provided', async () => {
+            const BOOK_TITLE = 'a'.repeat(6) + +Date.now();
+            const BOOK_DESCRIPTION = 'a'.repeat(20);
+            const BOOK_PRICE = 10;
+            const BOOK_DISCOUNT = 10;
+            const BOOK_AUTHORS: any[] = [];
+            const BOOK_GENRES: any[] = [];
+
+            const authorsIntegerCount = countIntegersInArray(BOOK_AUTHORS);
+            const genresIntegerCount = countIntegersInArray(BOOK_GENRES);
+
+            const token = (await agent.put(AUTH_URL).send({
+                email: 'john@example.com',
+                password: 'secret',
+            })).body.body.data.token;
+            const res = await agent
+                .post(BOOKS_URL)
+                .send({
+                    title: BOOK_TITLE,
+                    description: BOOK_DESCRIPTION,
+                    price: BOOK_PRICE,
+                    discount: BOOK_DISCOUNT,
+                    authors: BOOK_AUTHORS.join(','),
+                    genres: BOOK_GENRES.join(','),
+                })
+                .set('Authorization', `Bearer ${token}`);
+
+            res.should.have.status(200);
+            res.body.should.have.property('status').eql('success');
+            res.body.body.data.should.have.property('book');
+            res.body.body.data.book.should.have.property('title');
+            res.body.body.data.book.should.have.property('description');
+            res.body.body.data.book.should.have.property('imagePath');
+            res.body.body.data.book.should.have.property('price');
+            res.body.body.data.book.should.have.property('discount');
+            res.body.body.data.book.should.have.property('authors').that.each.have.property('id');
+            res.body.body.data.book.should.have.property('authors').that.each.have.property('name');
+            res.body.body.data.book.should.have.property('genres').that.each.have.property('id');
+            res.body.body.data.book.should.have.property('genres').that.each.have.property('name');
+            res.body.body.data.book.authors.should.be.a('array').that.have.lengthOf(authorsIntegerCount);
+            res.body.body.data.book.genres.should.be.a('array').that.have.lengthOf(genresIntegerCount);
         });
     });
 });

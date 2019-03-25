@@ -1,6 +1,9 @@
 import { Op } from 'sequelize';
+import sequelize from '@models/sequelize';
 import Bluebird from 'bluebird';
 import Book from '@models/Book';
+import Author from '@models/Author';
+import Genre from '@models/Genre';
 import RepositoryInterface from '@interfaces/RepositoryInterface';
 import NotFoundError from '@errors/NotFoundError';
 
@@ -57,9 +60,40 @@ class BookRepository implements RepositoryInterface {
      * @param data
      */
     public create(data: any): Bluebird<any> {
-        const { title, description, price, discount } = data;
+        const { title, description, price, discount, authors = '', genres = '' } = data;
 
-        return Book.create({ title, description, price, discount });
+        return sequelize.transaction(() => {
+            return Book.create({ title, description, price, discount }).then((book: Book) => {
+                const authorsPromise = authors
+                    ? Author.findAll({ where: { id: { [Op.in]: authors.split(',') } } })
+                    : Bluebird.resolve(null);
+                const genresPromise = genres
+                    ? Genre.findAll({ where: { id: { [Op.in]: genres.split(',') } } })
+                    : Bluebird.resolve(null);
+
+                return Bluebird.all([authorsPromise, genresPromise])
+                    .then(([authors, genres]) => {
+                        const setAuthorsPromise = authors ? book.setAuthors(authors) : Bluebird.resolve(null);
+                        const setGenresPromise = genres ? book.setGenres(genres) : Bluebird.resolve(null);
+
+                        return Bluebird.all([setAuthorsPromise, setGenresPromise]);
+                    })
+                    .then(() => {
+                        return book.reload({
+                            include: [
+                                {
+                                    model: Author,
+                                    through: { attributes: [] },
+                                },
+                                {
+                                    model: Genre,
+                                    through: { attributes: [] },
+                                },
+                            ],
+                        });
+                    });
+            });
+        });
     }
 
     /**
