@@ -34,6 +34,7 @@ router.delete('/genres/:id', [IsLoggedInMiddleware, IsAdminMiddleware], GenreCon
 router.get('/books', BookController.index);
 router.get('/books/:id', BookController.show);
 router.post('/books', [IsLoggedInMiddleware, IsAdminMiddleware], BookController.store);
+router.put('/books/:id', [IsLoggedInMiddleware, IsAdminMiddleware], BookController.update);
 
 router.use(ErrorHandleMiddleware);
 

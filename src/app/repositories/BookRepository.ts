@@ -102,7 +102,50 @@ class BookRepository implements RepositoryInterface {
      * @param data
      */
     public update(data: any): Bluebird<any> {
-        return Bluebird.resolve();
+        const { id, title, description, price, discount, authors = '', genres = '' } = data;
+
+        return sequelize.transaction(() => {
+            return Book.findOne({ where: { id } })
+                .then((book: Book | null) => {
+                    if (!book) {
+                        return Bluebird.reject(new NotFoundError(`Book with id ${id} doesn't exist.`));
+                    }
+
+                    book.title = title;
+                    book.description = description;
+                    book.price = price;
+                    book.discount = discount;
+
+                    return book.save();
+                })
+                .then((book: Book) => {
+                    const authorsPromise = authors
+                        ? Author.findAll({ where: { id: { [Op.in]: authors.split(',') } } })
+                        : Bluebird.resolve(null);
+                    const genresPromise = genres
+                        ? Genre.findAll({ where: { id: { [Op.in]: genres.split(',') } } })
+                        : Bluebird.resolve(null);
+
+                    return Bluebird.all([authorsPromise, genresPromise])
+                        .then(([authors, genres]) => {
+                            return Bluebird.all([book.setAuthors(authors), book.setGenres(genres)]);
+                        })
+                        .then(() => {
+                            return book.reload({
+                                include: [
+                                    {
+                                        model: Author,
+                                        through: { attributes: [] },
+                                    },
+                                    {
+                                        model: Genre,
+                                        through: { attributes: [] },
+                                    },
+                                ],
+                            });
+                        });
+                });
+        });
     }
 
     /**

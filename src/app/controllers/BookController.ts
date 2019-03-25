@@ -62,7 +62,15 @@ class BookController implements ControllerInterface {
      * @param res
      * @param next
      */
-    public update(req: any, res: any, next: Function) {}
+    public async update(req: any, res: any, next: Function) {
+        try {
+            const book: Book = await BookRepository.update({ ...req.params, ...req.body });
+
+            JsonView.render(res, { code: 200, text: 'Book was successfully updated.', data: { book } });
+        } catch (error) {
+            next(error);
+        }
+    }
 
     /**
      * Delete book

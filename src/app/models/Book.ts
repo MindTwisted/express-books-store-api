@@ -1,4 +1,5 @@
 import { Model, Column, Table, DataType, BelongsToMany, Scopes } from 'sequelize-typescript';
+import Bluebird from 'bluebird';
 import { Op } from 'sequelize';
 import Author from '@models/Author';
 import Genre from '@models/Genre';
@@ -110,22 +111,30 @@ export default class Book extends Model<Book> {
     @BelongsToMany(() => Genre, () => BookGenre)
     public genres?: Genre[];
 
-    public setAuthors(authors: Author[]) {
-        const bulkCreateValues: { bookId: number; authorId: number }[] = authors.map((author: Author) => {
-            return { bookId: this.id, authorId: author.id };
-        });
+    public setAuthors(authors: Author[] | null) {
+        const bulkCreateValues: { bookId: number; authorId: number }[] | null = authors
+            ? authors.map((author: Author) => ({ bookId: this.id, authorId: author.id }))
+            : null;
 
         return BookAuthor.destroy({ where: { bookId: this.id } }).then(() => {
+            if (!bulkCreateValues) {
+                return Bluebird.resolve(null);
+            }
+
             return BookAuthor.bulkCreate(bulkCreateValues);
         });
     }
 
-    public setGenres(genres: Genre[]) {
-        const bulkCreateValues: { bookId: number; genreId: number }[] = genres.map((genre: Genre) => {
-            return { bookId: this.id, genreId: genre.id };
-        });
+    public setGenres(genres: Genre[] | null) {
+        const bulkCreateValues: { bookId: number; genreId: number }[] | null = genres
+            ? genres.map((genre: Genre) => ({ bookId: this.id, genreId: genre.id }))
+            : null;
 
         return BookGenre.destroy({ where: { bookId: this.id } }).then(() => {
+            if (!bulkCreateValues) {
+                return Bluebird.resolve(null);
+            }
+
             return BookGenre.bulkCreate(bulkCreateValues);
         });
     }
